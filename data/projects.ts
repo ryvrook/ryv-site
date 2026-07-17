@@ -11,7 +11,7 @@ export type Project = {
   pinned?: boolean;
   // deployment link
   url?: string;
-  // Absent = private repo
+  // Absent = private repo although I have been ignoring this tbh
   repo?: string;
   mirror?: { href: string; label: string };
   summary: string;

@@ -14,7 +14,7 @@ export const site = {
   github: 'https://github.com/ryvrook',
   socials: [
     { label: 'github', href: 'https://github.com/ryvrook' },
-    { label: 'x', href: '#' },
+    { label: 'x', href: 'https://x.com/ryvrook' },
     { label: 'bluesky', href: '#' },
     { label: 'youtube', href: '#' },
     { label: 'discord', href: '#' },

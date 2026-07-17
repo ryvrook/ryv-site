@@ -3,6 +3,8 @@ import { projects } from '@/data/projects';
 import { getPosts } from '@/lib/posts';
 import { site } from '@/data/site';
 
+export const dynamic = 'force-static';
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages = ['', '/projects', '/blog', '/contact'].map((path) => ({
     url: `${site.url}${path}`,
