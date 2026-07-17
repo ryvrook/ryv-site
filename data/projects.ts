@@ -28,6 +28,7 @@ export const projects: Project[] = [
     lang: 'GDScript',
     updated: '2026-07-16',
     complexity: 2,
+    pinned: false,
     summary: '2D roguelike built in Godot. Early and changing shape weekly.',
     body: [
       'A 2D roguelike in Godot 4. I\'m deep in the item system right now, mapping out an expansion roadmap and getting the plumbing right before the content volume arrives.',
@@ -45,7 +46,7 @@ export const projects: Project[] = [
     lang: 'Go',
     updated: '2026-07-15',
     complexity: 4,
-    pinned: true,
+    pinned: false,
     summary:
       'Enterprise DNS monitoring in a single Go binary. REST API, WebSockets, admin panel, org dashboard. No microservices, no JS build step.',
     body: [
@@ -66,6 +67,7 @@ export const projects: Project[] = [
     lang: 'JavaScript',
     updated: '2026-07-13',
     complexity: 3,
+    pinned: false,
     url: 'https://roadrunnerlog.com',
     summary:
       'Self-hosted maintenance logbook for every vehicle you own. Service records, parts, costs, odometer history, file uploads.',
@@ -86,6 +88,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-07-13',
     complexity: 3,
+    pinned: false,
     summary:
       'Website scanner for SEO readiness and AI-search readiness. Crawls a site, runs a catalog of checks, produces a diffable JSON report.',
     body: [
@@ -105,6 +108,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-07-04',
     complexity: 3,
+    pinned: false,
     url: 'https://qwuickswap.com',
     summary:
       'Self-hosted media multitool. Image conversion runs in the browser on WASM codecs, video trims and audio extraction run server-side through ffmpeg.',
@@ -125,6 +129,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-07-04',
     complexity: 2,
+    pinned: false,
     summary:
       'Discord front-end for qwuickswap. Paste a link, get back a trimmed video, an MP3, or a soundboard clip without leaving the channel.',
     body: [
@@ -143,6 +148,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-07-17',
     complexity: 1,
+    pinned: false,
     repo: 'https://github.com/ryvrook/ryv-site',
     url: 'https://ryvrook.com',
     summary:
@@ -164,6 +170,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-07-02',
     complexity: 3,
+    pinned: false,
     summary:
       'Build a NixOS config in the browser from real nixpkgs data, then push it to your repo as a pull request. Btw, this project sucks.',
     body: [
@@ -183,6 +190,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-07-02',
     complexity: 3,
+    pinned: false,
     summary:
       'Tooling behind a freelance website service. An operator workbench plus a research layer that grounds every site in keyword strategy and positioning.',
     body: [
@@ -201,6 +209,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-06-28',
     complexity: 3,
+    pinned: false,
     license: 'Apache-2.0',
     repo: 'https://github.com/ryvrook/AskFriday',
     summary:
@@ -222,6 +231,7 @@ export const projects: Project[] = [
     lang: 'Go',
     updated: '2026-06-23',
     complexity: 4,
+    pinned: false,
     summary:
       'Multi-tenant redirect-mapping SaaS. Upload an old sitemap, get back a CSV or htaccess of 301s with deterministic wildcard pattern detection.',
     body: [
@@ -244,6 +254,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-06-16',
     complexity: 1,
+    pinned: false,
     summary: 'Landing page for Corvid Data LLC.',
     body: [
       'Landing page for Corvid Data LLC. Services, branding, contact. Small on purpose.',
@@ -259,6 +270,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-06-14',
     complexity: 3,
+    pinned: false,
     repo: 'https://github.com/ryvrook/Randomizr',
     summary:
       'Randomize anything. Any list, any source, twenty-plus methods from roulette wheel to plinko. Descendant of a 2012 original that still lives in og/.',
@@ -279,6 +291,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-05-18',
     complexity: 2,
+    pinned: false,
     summary:
       'Pixel-art workshop where dressing an AI agent configures it for real. Hat = LLM, goggles = vision, tool belt = MCPs.',
     body: [
@@ -297,6 +310,7 @@ export const projects: Project[] = [
     lang: 'Go',
     updated: '2026-04-03',
     complexity: 2,
+    pinned: false,
     repo: 'https://github.com/Vector-DNS/vdns-tui',
     summary: 'Terminal UI companion to the VectorDNS CLI. Full report view, interactive settings, account login.',
     body: [
@@ -315,6 +329,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-03-30',
     complexity: 4,
+    pinned: false,
     license: 'GPL-2.0',
     url: 'https://vectordns.io',
     summary:
@@ -336,6 +351,7 @@ export const projects: Project[] = [
     lang: 'Go',
     updated: '2026-03-30',
     complexity: 3,
+    pinned: false,
     summary:
       'The Go microservice behind VectorDNS. Direct UDP/TCP resolution on miekg/dns, DNSSEC validation, propagation checks from 28 global resolvers.',
     body: [
@@ -355,6 +371,7 @@ export const projects: Project[] = [
     lang: 'Go',
     updated: '2026-03-27',
     complexity: 3,
+    pinned: false,
     license: 'GPL-3.0',
     repo: 'https://github.com/Vector-DNS/vdns-cli',
     summary:
@@ -376,6 +393,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-03-25',
     complexity: 3,
+    pinned: false,
     summary:
       'Self-hosted web client for Resend. Compose, contacts, broadcasts, a visual template editor, and live delivery events.',
     body: [
@@ -394,6 +412,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-03-25',
     complexity: 2,
+    pinned: false,
     summary:
       'Admin panel for VectorDNS. Invite codes with expiry, support email with threading, operational controls.',
     body: [
@@ -412,6 +431,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-03-04',
     complexity: 1,
+    pinned: false,
     summary: 'Test bench for web haptics. A page of buttons, each firing a different vibration pattern.',
     body: [
       'A small Vite/React test bench for the web Vibration API. Buttons fire different haptic patterns so you can feel what phones actually do with the values you send.',
