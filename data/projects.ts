@@ -8,6 +8,7 @@ export type Project = {
   updated: string;
   complexity: 1 | 2 | 3 | 4 | 5;
   license?: string;
+  pinned?: boolean;
   // deployment link
   url?: string;
   // Absent = private repo
@@ -44,6 +45,7 @@ export const projects: Project[] = [
     lang: 'Go',
     updated: '2026-07-15',
     complexity: 4,
+    pinned: true,
     summary:
       'Enterprise DNS monitoring in a single Go binary. REST API, WebSockets, admin panel, org dashboard. No microservices, no JS build step.',
     body: [

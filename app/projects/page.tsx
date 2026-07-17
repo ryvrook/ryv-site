@@ -6,7 +6,11 @@ import { statusColor, complexityBars } from '@/lib/format';
 export const metadata: Metadata = { title: 'projects' };
 
 export default function ProjectsPage() {
-  const sorted = [...projects].sort((a, b) => b.updated.localeCompare(a.updated));
+  const sorted = [...projects].sort(
+    (a, b) =>
+      Number(!!b.pinned) - Number(!!a.pinned) ||
+      b.updated.localeCompare(a.updated),
+  );
   return (
     <div className="fade-up flex flex-col">
       <div className="mb-[10px] flex items-baseline justify-between gap-3">
@@ -31,6 +35,11 @@ export default function ProjectsPage() {
                 <span className="text-[13px] font-semibold" style={{ color: 'var(--text-bright)' }}>
                   {p.name}
                 </span>
+                {p.pinned && (
+                  <span title="pinned" style={{ color: 'var(--amber)' }}>
+                    ★
+                  </span>
+                )}
                 <span style={{ color: statusColor[p.status] }}>{p.status}</span>
                 <span style={{ color: 'var(--text-dim)' }}>{p.lang}</span>
                 <span style={{ color: 'var(--text-dim)' }}>{p.updated}</span>
