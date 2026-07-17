@@ -1,10 +1,10 @@
 // `bun run activity` prints numbers to paste here for easy updates.
 
 export const languages: { name: string; percent: number }[] = [
-  { name: 'JavaScript', percent: 84.5 },
-  { name: 'HTML', percent: 77.2 },
-  { name: 'TypeScript', percent: 63.4 },
-  { name: 'SQL', percent: 40.7 },
-  { name: 'Go', percent: 26.1 },
-  { name: 'GDScript', percent: 5.8 },
+  { name: 'TypeScript', percent: 52.3 },
+  { name: 'Go', percent: 28.1 },
+  { name: 'HTML', percent: 6.2 },
+  { name: 'JavaScript', percent: 3.6 },
+  { name: 'GDScript', percent: 2.8 },
+  { name: 'PLpgSQL', percent: 2.7 },
 ];

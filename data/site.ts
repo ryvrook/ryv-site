@@ -31,6 +31,12 @@ export const site = {
   recent: [
     {
       date: '2026-07-17',
+      text: 'nef-list is live, a stupid list for friends',
+      href: '/projects/nef-list',
+      label: 'nef-list',
+    },
+    {
+      date: '2026-07-17',
       text: 'rebuilt this site',
       href: '/projects/this-site',
       label: 'this site',

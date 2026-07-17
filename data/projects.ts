@@ -22,6 +22,27 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: 'nef-list',
+    name: 'nef-list',
+    status: 'STABLE',
+    lang: 'JavaScript',
+    updated: '2026-07-17',
+    complexity: 2,
+    pinned: false,
+    url: 'https://nef.ryvrook.com',
+    repo: 'https://github.com/ryvrook/nef-list',
+    summary:
+      'Stupid list for friends. Drop your name, pfp, socials, and a message. No accounts, dark mode only, one plain-JS file on Cloudflare Workers + D1.',
+    body: [
+      'A list anyone can add themselves to: name, pfp, social handles (Discord, Telegram, Twitter/X, Bluesky, Steam friend code), and a message. No accounts. Posting hands your browser a secret edit token in localStorage, and that token is what lets you edit or delete your own entry later.',
+      'Every entry gets a permalink with proper Open Graph and oEmbed tags so it embeds nicely in Discord and Telegram. Social fields take usernames only; paste a full profile URL and it gets stripped down to the handle. The only rule is no links in name, message, or handles.',
+      'One plain-JS file on Cloudflare Workers with D1 storage. No build step. Wrangler bundles it on deploy.',
+    ],
+    changelog: [
+      { date: '2026-07-17', message: 'initial release: entries, edit tokens, embeds' },
+    ],
+  },
+  {
     slug: 'endpoint-game',
     name: 'endpoint-game',
     status: 'ACTIVE',
