@@ -46,7 +46,7 @@ export const projects: Project[] = [
     lang: 'Go',
     updated: '2026-07-15',
     complexity: 4,
-    pinned: false,
+    pinned: true,
     summary:
       'Enterprise DNS monitoring in a single Go binary. REST API, WebSockets, admin panel, org dashboard. No microservices, no JS build step.',
     body: [
@@ -67,7 +67,7 @@ export const projects: Project[] = [
     lang: 'JavaScript',
     updated: '2026-07-13',
     complexity: 3,
-    pinned: false,
+    pinned: true,
     url: 'https://roadrunnerlog.com',
     summary:
       'Self-hosted maintenance logbook for every vehicle you own. Service records, parts, costs, odometer history, file uploads.',
@@ -84,7 +84,7 @@ export const projects: Project[] = [
   {
     slug: 'treecreeper',
     name: 'treecreeper',
-    status: 'ACTIVE',
+    status: 'EXPERIMENTAL',
     lang: 'TypeScript',
     updated: '2026-07-13',
     complexity: 3,
@@ -108,7 +108,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-07-04',
     complexity: 3,
-    pinned: false,
+    pinned: true,
     url: 'https://qwuickswap.com',
     summary:
       'Self-hosted media multitool. Image conversion runs in the browser on WASM codecs, video trims and audio extraction run server-side through ffmpeg.',
@@ -130,6 +130,7 @@ export const projects: Project[] = [
     updated: '2026-07-04',
     complexity: 2,
     pinned: false,
+    url: 'https://qwuick.aidensmith.dev',
     summary:
       'Discord front-end for qwuickswap. Paste a link, get back a trimmed video, an MP3, or a soundboard clip without leaving the channel.',
     body: [
@@ -148,7 +149,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-07-17',
     complexity: 1,
-    pinned: false,
+    pinned: true,
     repo: 'https://github.com/ryvrook/ryv-site',
     url: 'https://ryvrook.com',
     summary:
@@ -166,11 +167,12 @@ export const projects: Project[] = [
   {
     slug: 'ternix',
     name: 'ternix',
-    status: 'ACTIVE',
+    status: 'STABLE',
     lang: 'TypeScript',
     updated: '2026-07-02',
     complexity: 3,
     pinned: false,
+    url: 'https://ternix.org',
     summary:
       'Build a NixOS config in the browser from real nixpkgs data, then push it to your repo as a pull request. Btw, this project sucks.',
     body: [
@@ -186,7 +188,7 @@ export const projects: Project[] = [
   {
     slug: 'wrensmith',
     name: 'wrensmith',
-    status: 'ACTIVE',
+    status: 'EXPERIMENTAL',
     lang: 'TypeScript',
     updated: '2026-07-02',
     complexity: 3,
@@ -209,7 +211,8 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-06-28',
     complexity: 3,
-    pinned: false,
+    pinned: true,
+    url: 'https://askfriday.aidensmith.dev',
     license: 'Apache-2.0',
     repo: 'https://github.com/ryvrook/AskFriday',
     summary:
@@ -227,11 +230,12 @@ export const projects: Project[] = [
   {
     slug: 'swallowtail',
     name: 'Swallowtail',
-    status: 'ACTIVE',
+    status: 'STABLE',
     lang: 'Go',
     updated: '2026-06-23',
     complexity: 4,
     pinned: false,
+    url: 'https://swallowtail.app',
     summary:
       'Multi-tenant redirect-mapping SaaS. Upload an old sitemap, get back a CSV or htaccess of 301s with deterministic wildcard pattern detection.',
     body: [
@@ -255,6 +259,7 @@ export const projects: Project[] = [
     updated: '2026-06-16',
     complexity: 1,
     pinned: false,
+    url: 'https://corviddata.com',
     summary: 'Landing page for Corvid Data LLC.',
     body: [
       'Landing page for Corvid Data LLC. Services, branding, contact. Small on purpose.',
@@ -270,7 +275,8 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-06-14',
     complexity: 3,
-    pinned: false,
+    pinned: true,
+    url: 'https://therandomizr.com',
     repo: 'https://github.com/ryvrook/Randomizr',
     summary:
       'Randomize anything. Any list, any source, twenty-plus methods from roulette wheel to plinko. Descendant of a 2012 original that still lives in og/.',
@@ -330,7 +336,6 @@ export const projects: Project[] = [
     updated: '2026-03-30',
     complexity: 4,
     pinned: false,
-    license: 'GPL-2.0',
     url: 'https://vectordns.io',
     summary:
       'DNS lookup, WHOIS, and domain monitoring platform. Tracks DNS changes over time with visual diffs, plus teams and Stripe billing.',

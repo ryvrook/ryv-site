@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "activity": "node scripts/fetch-activity.mjs"
+    "activity": "node scripts/fetch-activity.mjs",
+    "updates": "node scripts/fetch-updates.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
