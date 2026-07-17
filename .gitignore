@@ -22,6 +22,3 @@
 
 # tooling artifacts
 .playwright-mcp/
-
-# post example
-/content/posts/example-post.md
