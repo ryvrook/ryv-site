@@ -1,0 +1,201 @@
+@import "tailwindcss";
+
+/* Ryv Hologram theme. All content styling hangs off tokens. */
+:root {
+  --bg: #0c0e10;
+  --panel: #101418;
+  --panel-deep: #0a0c0e;
+  --panel-mid: #0e1114;
+  --line: #242c34;
+  --line-soft: #1c232a;
+  --line-faint: #14181d;
+  --text: #aeb8bf;
+  --text-bright: #d4dde2;
+  --text-body: #9aa6ad;
+  --text-mid: #7d8a92;
+  --text-dim: #5c6870;
+  --text-faint: #3a444c;
+  --bar-off: #2a323a;
+  --accent: #6fbf63;
+  --amber: #d0a05c;
+  --cyan: #62a8b3;
+  --cyan-bright: #8fc9d3;
+  --red: #a35450;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+}
+
+body {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--cyan-bright);
+  text-decoration: underline;
+}
+
+::selection {
+  background: #2a4433;
+  color: var(--text-bright);
+}
+
+@keyframes blink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
+
+.fade-up {
+  animation: fadeUp 0.25s ease;
+}
+
+/* Section label: NOW / RECENT / CHANGELOG / etc. */
+.sec-label {
+  color: var(--text-dim);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}
+
+.row-hover:hover {
+  background: var(--panel);
+}
+
+.nav-link {
+  cursor: pointer;
+  padding: 2px 14px;
+  color: var(--text-dim);
+}
+.nav-link:first-child {
+  padding-left: 0;
+}
+.nav-link:hover {
+  color: var(--text-bright);
+  text-decoration: none;
+}
+.nav-link[data-active="true"] {
+  color: var(--text-bright);
+}
+
+.quiet-link {
+  color: var(--text-dim);
+}
+.quiet-link:hover {
+  color: var(--text-bright);
+}
+
+.btn-term {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  border: 1px solid var(--line);
+  padding: 5px 12px;
+  font-size: 11px;
+  color: var(--text-mid);
+  user-select: none;
+}
+.btn-term:hover {
+  color: var(--text-bright);
+  border-color: var(--text-faint);
+  text-decoration: none;
+}
+
+pre.term {
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--panel-deep);
+  border: 1px solid var(--line-soft);
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #8fa0a8;
+  overflow-x: auto;
+}
+
+/* Markdown post body. */
+.post-body {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.post-body p {
+  margin: 0;
+  color: var(--text-body);
+  font-size: 12.5px;
+  text-wrap: pretty;
+}
+.post-body h2,
+.post-body h3 {
+  margin: 8px 0 0;
+  color: var(--text-dim);
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 6px;
+}
+.post-body pre {
+  margin: 0;
+  padding: 12px 14px;
+  background: var(--panel-deep);
+  border: 1px solid var(--line-soft);
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.5;
+  color: #8fa0a8;
+  overflow-x: auto;
+}
+.post-body code {
+  font-family: inherit;
+  color: #c6d0d6;
+}
+.post-body p code {
+  background: var(--panel-deep);
+  border: 1px solid var(--line-soft);
+  padding: 1px 5px;
+  font-size: 11.5px;
+}
+.post-body strong {
+  color: var(--text-bright);
+  font-weight: 600;
+}
+.post-body img {
+  display: block;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 4px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+}
+.post-body ul,
+.post-body ol {
+  margin: 0;
+  padding-left: 20px;
+  color: var(--text-body);
+  font-size: 12.5px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.post-body blockquote {
+  margin: 0;
+  padding-left: 14px;
+  border-left: 2px solid var(--line);
+  color: var(--text-dim);
+}
