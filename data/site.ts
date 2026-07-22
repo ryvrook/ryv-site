@@ -31,25 +31,25 @@ export const site = {
   recent: [
     {
       date: '2026-07-22',
-      text: 'treecreeper reports now call out missed ai points and unmeasured categories',
+      text: 'Improved treecreeper reports to explain missed AI-readiness points and flag categories the scan could not measure.',
       href: '/projects/treecreeper',
       label: 'treecreeper',
     },
     {
       date: '2026-07-20',
-      text: 'wrote about oembed metadata, code blocks here get highlighting now',
+      text: 'Published a guide to oEmbed metadata and added syntax highlighting to code blocks on this site.',
       href: '/projects/this-site',
       label: 'this site',
     },
     {
       date: '2026-07-16',
-      text: 'endpoint-game: fixed sprite bleed, programs hit harder',
+      text: 'Fixed visual artifacts between sprites in endpoint-game and increased the impact of offensive programs.',
       href: '/projects/endpoint-game',
       label: 'endpoint-game',
     },
     {
       date: '2026-07-15',
-      text: 'enterprise-vectordns: status history, daily expiry sweep',
+      text: 'Added status-change history and a daily domain-expiration check to enterprise-vectordns.',
       href: '/projects/enterprise-vectordns',
       label: 'enterprise-vectordns',
     },
