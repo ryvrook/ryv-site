@@ -58,4 +58,5 @@ way I picture is a different story, because preview bots cache like crazy and
 change their minds without telling anyone. Most of my testing was pasting links
 into chats and waiting for them to forget what they saw last time.
 
+[nef.ryvrook.com](https://nef.ryvrook.com)
 [github.com/ryvrook/nef-list](https://github.com/ryvrook/nef-list)
