@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getPosts, getPost } from '@/lib/posts';
 import { formatTags } from '@/lib/format';
+import { ShareButton } from '@/components/ShareButton';
 import { site } from '@/data/site';
 
 type Props = { params: Promise<{ slug: string }> };
@@ -15,13 +16,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) return {};
-  return { title: post.title, description: post.blurb };
+  const url = `${site.url}/blog/${post.slug}`;
+  const image = `${url}/opengraph-image`;
+  return {
+    title: post.title,
+    description: post.blurb,
+    alternates: { canonical: url },
+    openGraph: {
+      type: 'article',
+      title: post.title,
+      description: post.blurb,
+      url,
+      siteName: site.name,
+      publishedTime: post.date,
+      images: [{ url: image, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.blurb,
+      images: [{ url: image, alt: post.title }],
+    },
+  };
 }
 
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getPost(slug);
   if (!post) notFound();
+  const url = `${site.url}/blog/${post.slug}`;
 
   return (
     <div className="fade-up flex flex-col gap-5">
@@ -36,10 +59,13 @@ export default async function BlogPostPage({ params }: Props) {
         >
           {post.title}
         </h1>
-        <div className="mt-2 flex flex-wrap gap-4 text-[11px]" style={{ color: 'var(--text-dim)' }}>
-          <span>{post.date}</span>
-          <span>{post.minutes} min read</span>
-          <span style={{ color: 'var(--text-faint)' }}>{formatTags(post.tags)}</span>
+        <div className="mt-2 flex items-center gap-4 text-[11px]" style={{ color: 'var(--text-dim)' }}>
+          <div className="flex flex-1 flex-wrap gap-4">
+            <span>{post.date}</span>
+            <span>{post.minutes} min read</span>
+            <span style={{ color: 'var(--text-faint)' }}>{formatTags(post.tags)}</span>
+          </div>
+          <ShareButton title={post.title} url={url} />
         </div>
       </div>
 

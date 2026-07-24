@@ -115,6 +115,56 @@ a:hover {
   text-decoration: none;
 }
 
+/* Post sharing. */
+.share-control {
+  position: relative;
+  flex: none;
+}
+.share-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border: 0;
+  background: transparent;
+  padding: 2px 0;
+  color: var(--text-dim);
+  font: inherit;
+  cursor: pointer;
+}
+.share-trigger:hover,
+.share-trigger[aria-expanded="true"] {
+  color: var(--cyan-bright);
+}
+.share-menu {
+  position: absolute;
+  z-index: 10;
+  top: calc(100% + 7px);
+  right: 0;
+  display: flex;
+  min-width: 154px;
+  flex-direction: column;
+  padding: 5px;
+  border: 1px solid var(--line);
+  background: var(--panel-deep);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 35%);
+}
+.share-menu a,
+.share-menu button {
+  border: 0;
+  background: transparent;
+  padding: 6px 8px;
+  color: var(--text-mid);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.share-menu a:hover,
+.share-menu button:hover {
+  background: var(--panel);
+  color: var(--text-bright);
+  text-decoration: none;
+}
+
 pre.term {
   margin: 0;
   padding: 12px 14px;
