@@ -36,20 +36,6 @@ export function ShareButton({ title, url }: ShareButtonProps) {
     window.setTimeout(() => setCopied(false), 1800);
   }
 
-  async function nativeShare() {
-    if (!navigator.share) {
-      await copyLink();
-      return;
-    }
-
-    try {
-      await navigator.share({ title, url });
-      setOpen(false);
-    } catch (error) {
-      if ((error as DOMException).name !== 'AbortError') await copyLink();
-    }
-  }
-
   const encodedUrl = encodeURIComponent(url);
   const encodedTitle = encodeURIComponent(title);
 
@@ -87,10 +73,10 @@ export function ShareButton({ title, url }: ShareButtonProps) {
             reddit
           </a>
           <button type="button" role="menuitem" onClick={copyLink}>
-            copy for discord
+            discord
           </button>
-          <button type="button" role="menuitem" onClick={nativeShare}>
-            more…
+          <button type="button" role="menuitem" onClick={copyLink}>
+            copy link
           </button>
         </div>
       )}

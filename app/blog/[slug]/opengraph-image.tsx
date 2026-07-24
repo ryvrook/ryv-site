@@ -24,29 +24,75 @@ export default async function OpenGraphImage({
     (
       <div
         style={{
+          position: 'relative',
           width: '100%',
           height: '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
           padding: '72px 80px',
-          background: '#0c0e10',
-          color: '#d4dde2',
-          fontFamily: 'monospace',
-          border: '2px solid #242c34',
+          overflow: 'hidden',
+          background: '#050506',
+          color: '#f0f1f4',
+          fontFamily: 'serif',
+          fontWeight: 700,
+          border: '2px solid #252532',
         }}
       >
-        <div style={{ display: 'flex', color: '#5c6870', fontSize: 24 }}>
-          {site.name.toLowerCase()} / blog
+        <div
+          style={{
+            position: 'absolute',
+            top: 45,
+            right: 62,
+            display: 'flex',
+            width: 310,
+            height: 150,
+            border: '1px solid #302b50',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            top: 69,
+            right: 86,
+            display: 'flex',
+            width: 310,
+            height: 150,
+            border: '1px solid #1d2d3d',
+          }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            display: 'flex',
+            width: 320,
+            height: 5,
+            background: '#8177c9',
+          }}
+        />
+
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 14,
+            color: '#718087',
+            fontSize: 23,
+          }}
+        >
+          <span style={{ display: 'flex', color: '#8177c9' }}>/</span>
+          <span>{site.name.toLowerCase()} / blog</span>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 26 }}>
           <div
             style={{
               display: 'flex',
               maxWidth: 1020,
-              fontSize: post.title.length > 70 ? 48 : 58,
-              fontWeight: 600,
-              lineHeight: 1.18,
+              fontSize: post.title.length > 70 ? 47 : 57,
+              fontWeight: 700,
+              lineHeight: 1.16,
               letterSpacing: '-0.035em',
             }}
           >
@@ -56,8 +102,8 @@ export default async function OpenGraphImage({
             style={{
               display: 'flex',
               maxWidth: 980,
-              color: '#9aa6ad',
-              fontSize: 27,
+              color: '#bcc1cb',
+              fontSize: 26,
               lineHeight: 1.45,
             }}
           >
@@ -73,7 +119,7 @@ export default async function OpenGraphImage({
           }}
         >
           <span>{post.date}</span>
-          <span style={{ color: '#62a8b3' }}>ryvrook.com</span>
+          <span style={{ color: '#9a91dc', fontWeight: 600 }}>ryvrook.com</span>
         </div>
       </div>
     ),
