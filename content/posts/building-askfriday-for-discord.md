@@ -19,7 +19,7 @@ The extension works with regular API keys, but it can also use tools like Claude
 
 The extension worked well when I wanted help writing my own reply. The problem was that it only existed inside my Discord client.
 
-If someone else in a server wanted to ask Friday something, they couldn't. So I kept the same context and provider ideas and moved them into a bot that only runs in servers I allowlist.
+If someone else in a server wanted to ask Friday something, they couldn't. So I kept the same context and provider ideas and moved them into a bot that only runs in servers I allow.
 
 There are two ways to ask it something:
 
