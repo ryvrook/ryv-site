@@ -16,6 +16,19 @@ const marked = new Marked(
   }),
 );
 
+marked.use({
+  renderer: {
+    link({ href, title, tokens }) {
+      const text = this.parser.parseInline(tokens);
+      const titleAttr = title ? ` title="${title.replaceAll('"', '&quot;')}"` : '';
+      const externalAttrs = /^https?:\/\//i.test(href)
+        ? ' target="_blank" rel="noreferrer"'
+        : '';
+      return `<a href="${href.replaceAll('"', '&quot;')}"${titleAttr}${externalAttrs}>${text}</a>`;
+    },
+  },
+});
+
 export type Post = {
   slug: string;
   date: string;

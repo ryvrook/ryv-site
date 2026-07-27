@@ -5,6 +5,8 @@ import { execFileSync } from 'node:child_process';
 
 // Slug -> repo. Keep in sync with data/projects.ts.
 const repos = {
+  'friday-bot': 'ryvrook/friday-bot',
+  dotfiles: 'ryvrook/dotfiles',
   'endpoint-game': 'ryvrook/endpoint-game',
   'enterprise-vectordns': 'ryvrook/enterprise-vectordns',
   roadrunner: 'ryvrook/roadrunner',

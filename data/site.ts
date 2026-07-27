@@ -30,6 +30,24 @@ export const site = {
   ],
   recent: [
     {
+      date: '2026-07-27',
+      text: 'Released Friday Bot, a private-server Discord bot with contextual slash commands, mentions, replies, and per-server model settings.',
+      href: '/projects/friday-bot',
+      label: 'Friday Bot',
+    },
+    {
+      date: '2026-07-27',
+      text: 'Polished the AskFriday landing page and added policies and Worker observability.',
+      href: '/projects/askfriday',
+      label: 'AskFriday',
+    },
+    {
+      date: '2026-07-26',
+      text: 'Published my dotfiles: a flake-based NixOS configuration with Stow-managed app settings and a disposable QEMU target.',
+      href: '/projects/dotfiles',
+      label: 'dotfiles',
+    },
+    {
       date: '2026-07-22',
       text: 'Improved treecreeper reports to explain missed AI-readiness points and flag categories the scan could not measure.',
       href: '/projects/treecreeper',
@@ -40,18 +58,6 @@ export const site = {
       text: 'Published a guide to oEmbed metadata and added syntax highlighting to code blocks on this site.',
       href: '/projects/this-site',
       label: 'this site',
-    },
-    {
-      date: '2026-07-16',
-      text: 'Fixed visual artifacts between sprites in endpoint-game and increased the impact of offensive programs.',
-      href: '/projects/endpoint-game',
-      label: 'endpoint-game',
-    },
-    {
-      date: '2026-07-15',
-      text: 'Added status-change history and a daily domain-expiration check to enterprise-vectordns.',
-      href: '/projects/enterprise-vectordns',
-      label: 'enterprise-vectordns',
     },
   ] as RecentEntry[],
   copyrightYears: '2012-2026',

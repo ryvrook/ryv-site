@@ -5,6 +5,8 @@ import { writeFileSync } from 'node:fs';
 
 // Slug -> repo. Keep in sync with data/projects.ts.
 const repos = {
+  'friday-bot': 'ryvrook/friday-bot',
+  dotfiles: 'ryvrook/dotfiles',
   'nef-list': 'ryvrook/nef-list',
   'endpoint-game': 'ryvrook/endpoint-game',
   'enterprise-vectordns': 'ryvrook/enterprise-vectordns',

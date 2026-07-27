@@ -37,7 +37,7 @@ export default function ContactPage() {
             rel={s.href.startsWith('http') ? 'noreferrer' : undefined}
             className="btn-term inline-flex items-center gap-[7px]"
           >
-            <SocialIcon name={s.label} />
+            {s.label !== 'github' && <SocialIcon name={s.label} />}
             {s.label}
           </a>
         ))}

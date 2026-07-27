@@ -158,7 +158,7 @@ export default async function ProjectPage({ params }: Props) {
         {project.repo && (
           <>
             <a href={project.repo} target="_blank" rel="noreferrer">
-              repository ↗
+              repository
             </a>
             <a
               href={`${project.repo}/issues`}
@@ -166,7 +166,7 @@ export default async function ProjectPage({ params }: Props) {
               rel="noreferrer"
               className="quiet-link"
             >
-              issues ↗
+              issues
             </a>
           </>
         )}

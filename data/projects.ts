@@ -22,6 +22,50 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: 'friday-bot',
+    name: 'Friday Bot',
+    status: 'ACTIVE',
+    lang: 'TypeScript',
+    updated: '2026-07-27',
+    complexity: 3,
+    pinned: false,
+    url: 'https://askfriday.ryvrook.com',
+    repo: 'https://github.com/ryvrook/friday-bot',
+    summary:
+      'Private-server Discord bot with slash commands, mention and reply triggers, bounded channel context, and per-server provider and model settings.',
+    body: [
+      'The standalone Discord counterpart to the AskFriday Vencord extension. It answers slash commands, mentions, and replies to existing messages, with enough recent channel context to follow the conversation. Public and ephemeral responses are both supported.',
+      'Each allowlisted server can choose its own provider and model, while the host keeps control of credentials and defaults. Settings persist across restarts, incompatible model overrides are cleared when providers change, and readable Discord errors replace raw quota and rate-limit failures.',
+      'Built with Bun and discord.js, deployed as a locked-down systemd service. It only responds in explicitly allowlisted servers and never operates in direct messages.',
+    ],
+    changelog: [
+      { date: '2026-07-27', message: 'documented systemd deployment and production setup' },
+      { date: '2026-07-27', message: 'added provider choices, per-server models, and usage-limit handling' },
+      { date: '2026-07-27', message: 'initial Discord bot release' },
+    ],
+  },
+  {
+    slug: 'dotfiles',
+    name: 'dotfiles',
+    status: 'ACTIVE',
+    lang: 'Nix',
+    updated: '2026-07-26',
+    complexity: 3,
+    pinned: false,
+    repo: 'https://github.com/ryvrook/dotfiles',
+    summary:
+      'Flake-based NixOS system configuration plus GNU Stow-managed application dotfiles, with physical-host and disposable QEMU VM targets.',
+    body: [
+      'My NixOS system configuration and day-to-day application settings. Nix owns packages and the system; GNU Stow keeps application dotfiles as plain symlinked files that can be edited without rebuilding the machine.',
+      'The flake exposes both the physical host and a disposable QEMU VM, so the complete desktop can be tested from another Linux host before it reaches the real machine. The configuration covers the Niri desktop, shell, editors, terminal tools, gaming utilities, and supporting services.',
+    ],
+    changelog: [
+      { date: '2026-07-26', message: 'added NixOS flake and QEMU VM target' },
+      { date: '2026-07-26', message: 'moved the VM to the Niri session and host QEMU' },
+      { date: '2026-07-26', message: 'fixed VM cursor integration' },
+    ],
+  },
+  {
     slug: 'nef-list',
     name: 'nef-list',
     status: 'STABLE',
@@ -230,10 +274,10 @@ export const projects: Project[] = [
     name: 'AskFriday',
     status: 'STABLE',
     lang: 'TypeScript',
-    updated: '2026-06-28',
+    updated: '2026-07-27',
     complexity: 3,
     pinned: true,
-    url: 'https://askfriday.aidensmith.dev',
+    url: 'https://askfriday.ryvrook.dev',
     license: 'Apache-2.0',
     repo: 'https://github.com/ryvrook/AskFriday',
     summary:
@@ -244,6 +288,7 @@ export const projects: Project[] = [
       'Desktop and Vesktop only. Requests route through the Electron main process to dodge browser CORS, which web Vencord can\'t do.',
     ],
     changelog: [
+      { date: '2026-07-27', message: 'updated the landing page, policies, branding, and Worker observability' },
       { date: '2026-06-28', message: 'style modal replaces re-roll submenu, humanized replies' },
       { date: '2026-06-28', message: 'landing page served via Cloudflare Worker' },
     ],
