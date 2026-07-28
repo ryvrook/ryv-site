@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { projects, getProject } from '@/data/projects';
@@ -29,28 +30,40 @@ export default async function ProjectPage({ params }: Props) {
         <Link href="/projects">projects</Link> / {project.name}
       </div>
 
-      <div>
-        <div className="flex flex-wrap items-baseline gap-3">
-          <h1 className="m-0 text-[19px] font-semibold" style={{ color: 'var(--text-bright)' }}>
-            {project.name}
-          </h1>
-          <span className="text-[11px]" style={{ color: statusColor[project.status] }}>
-            ● {project.status}
-          </span>
-        </div>
-        <div className="mt-2 flex flex-wrap gap-5 text-[11px]" style={{ color: 'var(--text-dim)' }}>
-          <span>
-            lang: <span style={{ color: 'var(--text)' }}>{project.lang}</span>
-          </span>
-          <span>
-            updated: <span style={{ color: 'var(--text)' }}>{project.updated}</span>
-          </span>
-          {project.license && (
-            <span>
-              license: <span style={{ color: 'var(--text)' }}>{project.license}</span>
+      <div className="flex items-start justify-between gap-5">
+        <div>
+          <div className="flex flex-wrap items-baseline gap-3">
+            <h1 className="m-0 text-[19px] font-semibold" style={{ color: 'var(--text-bright)' }}>
+              {project.name}
+            </h1>
+            <span className="text-[11px]" style={{ color: statusColor[project.status] }}>
+              ● {project.status}
             </span>
-          )}
+          </div>
+          <div className="mt-2 flex flex-wrap gap-5 text-[11px]" style={{ color: 'var(--text-dim)' }}>
+            <span>
+              lang: <span style={{ color: 'var(--text)' }}>{project.lang}</span>
+            </span>
+            <span>
+              updated: <span style={{ color: 'var(--text)' }}>{project.updated}</span>
+            </span>
+            {project.license && (
+              <span>
+                license: <span style={{ color: 'var(--text)' }}>{project.license}</span>
+              </span>
+            )}
+          </div>
         </div>
+        {project.image && (
+          <Image
+            src={project.image}
+            alt={`${project.name} logo`}
+            width={96}
+            height={96}
+            priority
+            className="size-20 shrink-0 object-contain sm:size-24"
+          />
+        )}
       </div>
 
       <div

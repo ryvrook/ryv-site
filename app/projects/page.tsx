@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { projects } from '@/data/projects';
 import { statusColor, complexityBars } from '@/lib/format';
@@ -28,9 +29,20 @@ export default function ProjectsPage() {
             <Link
               key={p.slug}
               href={`/projects/${p.slug}`}
-              className="row-hover block px-1 py-[15px] no-underline hover:no-underline"
+              className={`row-hover relative block px-1 py-[15px] no-underline hover:no-underline ${
+                p.image ? 'pr-[84px]' : ''
+              }`}
               style={{ borderBottom: '1px solid var(--line-soft)', color: 'inherit' }}
             >
+              {p.image && (
+                <Image
+                  src={p.image}
+                  alt=""
+                  width={64}
+                  height={64}
+                  className="absolute top-[15px] right-1 size-16 object-contain"
+                />
+              )}
               <div className="flex flex-wrap items-baseline gap-3 text-[11px]">
                 <span className="text-[13px] font-semibold" style={{ color: 'var(--text-bright)' }}>
                   {p.name}

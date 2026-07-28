@@ -14,6 +14,8 @@ export type Project = {
   // Absent = private repo although I have been ignoring this tbh
   repo?: string;
   mirror?: { href: string; label: string };
+  // Square brand mark or representative project image.
+  image?: string;
   summary: string;
   body: string[];
   diagram?: string;
@@ -23,7 +25,7 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: 'friday-bot',
-    name: 'Friday Bot',
+    name: 'AskFriday Bot',
     status: 'ACTIVE',
     lang: 'TypeScript',
     updated: '2026-07-27',
@@ -31,6 +33,7 @@ export const projects: Project[] = [
     pinned: false,
     url: 'https://askfriday.ryvrook.com',
     repo: 'https://github.com/ryvrook/friday-bot',
+    image: '/projects/friday-logo.png',
     summary:
       'Private-server Discord bot with slash commands, mention and reply triggers, bounded channel context, and per-server provider and model settings.',
     body: [
@@ -42,6 +45,29 @@ export const projects: Project[] = [
       { date: '2026-07-27', message: 'documented systemd deployment and production setup' },
       { date: '2026-07-27', message: 'added provider choices, per-server models, and usage-limit handling' },
       { date: '2026-07-27', message: 'initial Discord bot release' },
+    ],
+  },
+  {
+    slug: 'boobies-media',
+    name: 'Boobies Media',
+    status: 'ACTIVE',
+    lang: 'Go',
+    updated: '2026-07-27',
+    complexity: 4,
+    pinned: false,
+    repo: 'https://github.com/ryvrook/boobies-media',
+    image: '/projects/boobies-media-logo.png',
+    summary:
+      'Private media library for a small group, with resumable uploads, remote ingestion, folders, tags, share pages, and automatic thumbnails.',
+    body: [
+      'A private image and video library built for a small group. It accepts chunked, resumable uploads as well as remote links from Discord, Twitter/X, YouTube, TikTok, and Medal, then probes the media, generates thumbnails, and deduplicates it by content.',
+      'The library has folders, tags, search, bulk actions, anonymous share pages with Discord-friendly embeds, and user administration. External downloads are handled as background jobs with SSRF protections, and missing media tools degrade only the features that need them.',
+      'The server is a single Go application with an embedded TypeScript interface and SQLite storage. It ships as a production container for Dokploy behind a Cloudflare Tunnel, with nightly rotating backups and no publicly exposed application port.',
+    ],
+    changelog: [
+      { date: '2026-07-27', message: 'fixed Discord embeds for animated media' },
+      { date: '2026-07-26', message: 'added remote-ingestion fallbacks and media tooling checks' },
+      { date: '2026-07-23', message: 'initial private media library release' },
     ],
   },
   {
@@ -112,6 +138,7 @@ export const projects: Project[] = [
     updated: '2026-07-15',
     complexity: 4,
     pinned: true,
+    image: '/projects/vectordns-logo.png',
     summary:
       'Enterprise DNS monitoring in a single Go binary. REST API, WebSockets, admin panel, org dashboard. No microservices, no JS build step.',
     body: [
@@ -134,6 +161,7 @@ export const projects: Project[] = [
     complexity: 3,
     pinned: true,
     url: 'https://roadrunnerlog.com',
+    image: '/projects/roadrunner-logo.png',
     summary:
       'Self-hosted maintenance logbook for every vehicle you own. Service records, parts, costs, odometer history, file uploads.',
     body: [
@@ -175,6 +203,7 @@ export const projects: Project[] = [
     complexity: 3,
     pinned: true,
     url: 'https://qwuickswap.com',
+    image: '/projects/qwuickswap-logo.png',
     summary:
       'Self-hosted media multitool. Image conversion runs in the browser on WASM codecs, video trims and audio extraction run server-side through ffmpeg.',
     body: [
@@ -238,6 +267,7 @@ export const projects: Project[] = [
     complexity: 3,
     pinned: false,
     url: 'https://ternix.org',
+    image: '/projects/ternix-logo.png',
     summary:
       'Build a NixOS config in the browser from real nixpkgs data, then push it to your repo as a pull request. Btw, this project sucks.',
     body: [
@@ -258,6 +288,7 @@ export const projects: Project[] = [
     updated: '2026-07-02',
     complexity: 3,
     pinned: false,
+    image: '/projects/wrensmith-logo.png',
     summary:
       'Tooling behind a freelance website service. An operator workbench plus a research layer that grounds every site in keyword strategy and positioning.',
     body: [
@@ -280,6 +311,7 @@ export const projects: Project[] = [
     url: 'https://askfriday.ryvrook.dev',
     license: 'Apache-2.0',
     repo: 'https://github.com/ryvrook/AskFriday',
+    image: '/projects/friday-logo.png',
     summary:
       'Vencord plugin. Hover a Discord message and an LLM drafts a human-sounding reply into your compose box, using the surrounding conversation as context.',
     body: [
@@ -302,6 +334,7 @@ export const projects: Project[] = [
     complexity: 4,
     pinned: false,
     url: 'https://swallowtail.app',
+    image: '/projects/swallowtail-logo.svg',
     summary:
       'Multi-tenant redirect-mapping SaaS. Upload an old sitemap, get back a CSV or htaccess of 301s with deterministic wildcard pattern detection.',
     body: [
@@ -344,6 +377,7 @@ export const projects: Project[] = [
     pinned: true,
     url: 'https://therandomizr.com',
     repo: 'https://github.com/ryvrook/Randomizr',
+    image: '/projects/randomizr-logo.svg',
     summary:
       'Randomize anything. Any list, any source, twenty-plus methods from roulette wheel to plinko. Descendant of a 2012 original that still lives in og/.',
     body: [
@@ -384,6 +418,7 @@ export const projects: Project[] = [
     complexity: 2,
     pinned: false,
     repo: 'https://github.com/Vector-DNS/vdns-tui',
+    image: '/projects/vectordns-logo.png',
     summary: 'Terminal UI companion to the VectorDNS CLI. Full report view, interactive settings, account login.',
     body: [
       'VectorDNS for people who live in the terminal. A full report view (including rate limit warnings) and a settings view with account login for the remote features.',
@@ -403,6 +438,7 @@ export const projects: Project[] = [
     complexity: 4,
     pinned: false,
     url: 'https://vectordns.io',
+    image: '/projects/vectordns-logo.png',
     summary:
       'DNS lookup, WHOIS, and domain monitoring platform. Tracks DNS changes over time with visual diffs, plus teams and Stripe billing.',
     body: [
@@ -423,6 +459,7 @@ export const projects: Project[] = [
     updated: '2026-03-30',
     complexity: 3,
     pinned: false,
+    image: '/projects/vectordns-logo.png',
     summary:
       'The Go microservice behind VectorDNS. Direct UDP/TCP resolution on miekg/dns, DNSSEC validation, propagation checks from 28 global resolvers.',
     body: [
@@ -445,6 +482,7 @@ export const projects: Project[] = [
     pinned: false,
     license: 'GPL-3.0',
     repo: 'https://github.com/Vector-DNS/vdns-cli',
+    image: '/projects/vectordns-logo.png',
     summary:
       'DNS and domain lookup CLI with colored output. Works with no account via local resolution. Connect VectorDNS for WHOIS, availability, and SSL.',
     body: [
@@ -465,6 +503,7 @@ export const projects: Project[] = [
     updated: '2026-03-25',
     complexity: 3,
     pinned: false,
+    image: '/projects/lotus-mail-logo.png',
     summary:
       'Self-hosted web client for Resend. Compose, contacts, broadcasts, a visual template editor, and live delivery events.',
     body: [
@@ -484,6 +523,7 @@ export const projects: Project[] = [
     updated: '2026-03-25',
     complexity: 2,
     pinned: false,
+    image: '/projects/vectordns-logo.png',
     summary:
       'Admin panel for VectorDNS. Invite codes with expiry, support email with threading, operational controls.',
     body: [
