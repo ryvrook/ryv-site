@@ -55,6 +55,7 @@ export const projects: Project[] = [
     updated: '2026-07-27',
     complexity: 4,
     pinned: false,
+    url: 'https://boobies.ryvsite.com',
     repo: 'https://github.com/ryvrook/boobies-media',
     image: '/projects/boobies-media-logo.png',
     summary:
@@ -68,6 +69,30 @@ export const projects: Project[] = [
       { date: '2026-07-27', message: 'fixed Discord embeds for animated media' },
       { date: '2026-07-26', message: 'added remote-ingestion fallbacks and media tooling checks' },
       { date: '2026-07-23', message: 'initial private media library release' },
+    ],
+  },
+  {
+    slug: 'booby-bot',
+    name: 'booby-bot',
+    status: 'ACTIVE',
+    lang: 'Go',
+    updated: '2026-07-29',
+    complexity: 3,
+    license: 'MIT',
+    pinned: false,
+    url: 'https://boobies.ryvsite.com',
+    repo: 'https://github.com/ryvrook/booby-bot',
+    summary:
+      'Discord bot that saves attachments and supported media links into a boobies-media library through reactions, watched channels, commands, and message actions.',
+    body: [
+      'The Discord client for boobies-media. React to a message, post in a watched channel, use /upload, or choose Save to media from a message menu, and the bot sends each attachment or supported link to the library with the right folder and attribution tags.',
+      'A small worker pool handles ingestion while per-user and per-server rate limits control admission. A local SQLite ledger deduplicates Discord attachments by snowflake, preserves channel mappings and watch lists, and resumes unfinished jobs after a restart.',
+      'Written in Go and deployed as a static distroless container alongside boobies-media. It never downloads or processes media itself: the server handles extraction, probing, thumbnails, and storage while the bot keeps only the Discord integration and ingestion state.',
+    ],
+    changelog: [
+      { date: '2026-07-29', message: 'accepted typed folder paths in command options' },
+      { date: '2026-07-29', message: 'documented usage, administration, and deployment' },
+      { date: '2026-07-29', message: 'fixed the container build after a dependency revert' },
     ],
   },
   {
