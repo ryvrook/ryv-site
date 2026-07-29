@@ -24,9 +24,9 @@ export const site = {
   avatar: 'https://avatars.githubusercontent.com/u/29802327?v=4' as string | null,
   bio: 'I build software mostly to find out how things work, which means I end up rebuilding a lot of things other people consider solved.',
   now: [
-    'Sharpening treecreeper reports, missed AI points and unmeasured categories.',
-    'Building a 2D roguelike in Godot.',
-    'Hardening enterprise-vectordns monitoring.',
+    'Building out Friday Bot for private Discord servers.',
+    'Running a private media library for a small group.',
+    'Moving my daily setup into a flake-based NixOS configuration.',
   ],
   recent: [
     {
