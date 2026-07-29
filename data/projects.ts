@@ -138,6 +138,7 @@ export const projects: Project[] = [
     updated: '2026-07-15',
     complexity: 4,
     pinned: true,
+    url: 'https://vectordns.dev',
     image: '/projects/vectordns-logo.png',
     summary:
       'Enterprise DNS monitoring in a single Go binary. REST API, WebSockets, admin panel, org dashboard. No microservices, no JS build step.',
