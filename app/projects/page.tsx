@@ -10,6 +10,8 @@ export default function ProjectsPage() {
   const sorted = [...projects].sort(
     (a, b) =>
       Number(!!b.pinned) - Number(!!a.pinned) ||
+      (a.pinnedOrder ?? Number.MAX_SAFE_INTEGER) -
+        (b.pinnedOrder ?? Number.MAX_SAFE_INTEGER) ||
       b.updated.localeCompare(a.updated),
   );
   return (

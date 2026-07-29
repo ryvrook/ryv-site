@@ -9,6 +9,8 @@ export type Project = {
   complexity: 1 | 2 | 3 | 4 | 5;
   license?: string;
   pinned?: boolean;
+  // Lower numbers appear first among pinned projects.
+  pinnedOrder?: number;
   // deployment link
   url?: string;
   // Absent = private repo although I have been ignoring this tbh
@@ -102,7 +104,8 @@ export const projects: Project[] = [
     lang: 'Nix',
     updated: '2026-07-26',
     complexity: 3,
-    pinned: false,
+    pinned: true,
+    pinnedOrder: 2,
     repo: 'https://github.com/ryvrook/dotfiles',
     summary:
       'Flake-based NixOS system configuration plus GNU Stow-managed application dotfiles, with physical-host and disposable QEMU VM targets.',
@@ -163,6 +166,7 @@ export const projects: Project[] = [
     updated: '2026-07-15',
     complexity: 4,
     pinned: true,
+    pinnedOrder: 3,
     url: 'https://vectordns.dev',
     image: '/projects/vectordns-logo.png',
     summary:
@@ -186,6 +190,7 @@ export const projects: Project[] = [
     updated: '2026-07-13',
     complexity: 3,
     pinned: true,
+    pinnedOrder: 5,
     url: 'https://roadrunnerlog.com',
     image: '/projects/roadrunner-logo.png',
     summary:
@@ -207,7 +212,8 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-07-13',
     complexity: 3,
-    pinned: false,
+    pinned: true,
+    pinnedOrder: 7,
     summary:
       'Website scanner for SEO readiness and AI-search readiness. Crawls a site, runs a catalog of checks, produces a diffable JSON report.',
     body: [
@@ -228,6 +234,7 @@ export const projects: Project[] = [
     updated: '2026-07-04',
     complexity: 3,
     pinned: true,
+    pinnedOrder: 8,
     url: 'https://qwuickswap.com',
     image: '/projects/qwuickswap-logo.png',
     summary:
@@ -270,6 +277,7 @@ export const projects: Project[] = [
     updated: '2026-07-17',
     complexity: 1,
     pinned: true,
+    pinnedOrder: 1,
     repo: 'https://github.com/ryvrook/ryv-site',
     url: 'https://ryvrook.com',
     summary:
@@ -333,7 +341,7 @@ export const projects: Project[] = [
     lang: 'TypeScript',
     updated: '2026-07-27',
     complexity: 3,
-    pinned: true,
+    pinned: false,
     url: 'https://askfriday.ryvrook.dev',
     license: 'Apache-2.0',
     repo: 'https://github.com/ryvrook/AskFriday',
@@ -358,7 +366,8 @@ export const projects: Project[] = [
     lang: 'Go',
     updated: '2026-06-23',
     complexity: 4,
-    pinned: false,
+    pinned: true,
+    pinnedOrder: 6,
     url: 'https://swallowtail.app',
     image: '/projects/swallowtail-logo.svg',
     summary:
@@ -401,6 +410,7 @@ export const projects: Project[] = [
     updated: '2026-06-14',
     complexity: 3,
     pinned: true,
+    pinnedOrder: 4,
     url: 'https://therandomizr.com',
     repo: 'https://github.com/ryvrook/Randomizr',
     image: '/projects/randomizr-logo.svg',
