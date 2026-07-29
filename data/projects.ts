@@ -57,7 +57,7 @@ export const projects: Project[] = [
     updated: '2026-07-27',
     complexity: 4,
     pinned: false,
-    url: 'https://boobies.ryvsite.com',
+    url: 'https://boobies.ryvrook.com',
     repo: 'https://github.com/ryvrook/boobies-media',
     image: '/projects/boobies-media-logo.png',
     summary:
@@ -82,7 +82,7 @@ export const projects: Project[] = [
     complexity: 3,
     license: 'MIT',
     pinned: false,
-    url: 'https://boobies.ryvsite.com',
+    url: 'https://boobies.ryvrook.com',
     repo: 'https://github.com/ryvrook/booby-bot',
     summary:
       'Discord bot that saves attachments and supported media links into a boobies-media library through reactions, watched channels, commands, and message actions.',
