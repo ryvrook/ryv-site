@@ -25,7 +25,7 @@ export const site = {
   bio: 'I build software mostly to find out how things work, which means I end up rebuilding a lot of things other people consider solved.',
   now: [
     'Building out Friday Bot for private Discord servers.',
-    'Running a private media library for a small group.',
+    'Connecting Discord to my private media library with booby-bot.',
     'Moving my daily setup into a flake-based NixOS configuration.',
   ],
   recent: [

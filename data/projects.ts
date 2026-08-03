@@ -110,7 +110,7 @@ export const projects: Project[] = [
     summary:
       'Flake-based NixOS system configuration plus GNU Stow-managed application dotfiles, with physical-host and disposable QEMU VM targets.',
     body: [
-      'My NixOS system configuration and day-to-day application settings. Nix owns packages and the system; GNU Stow keeps application dotfiles as plain symlinked files that can be edited without rebuilding the machine.',
+      'My NixOS system configuration and day-to-day application settings. Nix owns packages and the system. GNU Stow keeps application dotfiles as plain symlinked files you can edit without rebuilding the machine.',
       'The flake exposes both the physical host and a disposable QEMU VM, so the complete desktop can be tested from another Linux host before it reaches the real machine. The configuration covers the Niri desktop, shell, editors, terminal tools, gaming utilities, and supporting services.',
     ],
     changelog: [
@@ -133,7 +133,7 @@ export const projects: Project[] = [
       'Stupid list for friends. Drop your name, pfp, socials, and a message. No accounts, dark mode only, one plain-JS file on Cloudflare Workers + D1.',
     body: [
       'A list anyone can add themselves to: name, pfp, social handles (Discord, Telegram, Twitter/X, Bluesky, Steam friend code), and a message. No accounts. Posting hands your browser a secret edit token in localStorage, and that token is what lets you edit or delete your own entry later.',
-      'Every entry gets a permalink with proper Open Graph and oEmbed tags so it embeds nicely in Discord and Telegram. Social fields take usernames only; paste a full profile URL and it gets stripped down to the handle. The only rule is no links in name, message, or handles.',
+      'Every entry gets a permalink with proper Open Graph and oEmbed tags so it embeds nicely in Discord and Telegram. Social fields take usernames only. Paste a full profile URL and it gets stripped down to the handle. The only rule is no links in name, message, or handles.',
       'One plain-JS file on Cloudflare Workers with D1 storage. No build step. Wrangler bundles it on deploy.',
     ],
     changelog: [
@@ -151,7 +151,7 @@ export const projects: Project[] = [
     summary: '2D roguelike built in Godot. Early and changing shape weekly.',
     body: [
       'A 2D roguelike in Godot 4. I\'m deep in the item system right now, mapping out an expansion roadmap and getting the plumbing right before the content volume arrives.',
-      'On the rendering side I fixed sprite bleed and deepened the signal wall effect. Still early enough that the interesting writeup is ahead of it.',
+      'I fixed sprite bleed and deepened the signal wall effect. It\'s still early enough that the interesting writeup is ahead of it.',
     ],
     changelog: [
       { date: '2026-07-16', message: 'item expansion technical roadmap' },
@@ -173,7 +173,7 @@ export const projects: Project[] = [
       'Enterprise DNS monitoring in a single Go binary. REST API, WebSockets, admin panel, org dashboard. No microservices, no JS build step.',
     body: [
       'VectorDNS rebuilt for enterprise use as one Go binary that serves everything. The same process handles the REST API, WebSocket change notifications, the admin panel, and an org-facing dashboard rendered with htmx. No microservices, no JavaScript build step, no external auth providers.',
-      'Built around org-scoped access control, webhook integrations, and append-style audit logging. Ships as a Docker Compose stack with PostgreSQL, Redis, Prometheus, and Grafana. Staging and production modes enforce strict security checks like verify-full Postgres TLS.',
+      'Org-scoped access control, webhook integrations, and append-style audit logging all live in the same binary. Ships as a Docker Compose stack with PostgreSQL, Redis, Prometheus, and Grafana. Staging and production modes enforce strict security checks like verify-full Postgres TLS.',
       'The current push is monitoring quality. Status transitions now get recorded as history, a daily sweep catches expiring domains, and flapping domains auto-throttle down to daily checks with a per-domain override.',
     ],
     changelog: [
@@ -218,7 +218,7 @@ export const projects: Project[] = [
       'Website scanner for SEO readiness and AI-search readiness. Crawls a site, runs a catalog of checks, produces a diffable JSON report.',
     body: [
       'Crawls a site and runs a catalog of checks covering classic SEO readiness and the newer question of AI-search readiness, then produces a diffable JSON report so you can track a site check-over-check.',
-      'The whole thing is one Docker image, a Bun server on a Playwright/Chromium base serving both the API and the SPA, with Postgres next to it. Migrations run on boot and interrupted scans recover automatically. Deployed behind Dokploy with Cloudflare in front, and the runbook covers the SSRF guard, egress hardening, and backups.',
+      'One Docker image contains a Bun server on a Playwright/Chromium base, serving both the API and SPA, with Postgres alongside it. Migrations run on boot and interrupted scans recover automatically. It runs behind Dokploy with Cloudflare in front. The runbook covers the SSRF guard, egress hardening, and backups.',
       'The schedules management page just landed, which wraps up phase 7 of the build.',
     ],
     changelog: [
@@ -283,7 +283,7 @@ export const projects: Project[] = [
     summary:
       'This site. Next.js, one column, two data files and a folder of markdown. You\'re looking at it.',
     body: [
-      'This site. Next.js app router, Tailwind, fully static. Identity and projects live in typed data files, blog posts are plain markdown, and everything else renders from those, including the RSS feed and sitemap.',
+      'This site is a fully static Next.js App Router project styled with Tailwind. Identity and projects live in typed data files, blog posts are plain markdown, and everything else renders from those, including the RSS feed and sitemap.',
       'It grew up in my old portfolio repo through a heavier "personal OS" concept before this design replaced it with a single column and fewer ideas. Now it lives in its own repo, which is where the old one felt it deserved to end up.',
     ],
     changelog: [
@@ -375,7 +375,7 @@ export const projects: Project[] = [
     body: [
       'Upload the sitemap of a site being migrated and get back a redirect map: CSV, htaccess, or nginx rules, with deterministic wildcard pattern detection. Built as a multi-tenant SaaS with a Next.js frontend and a Go backend split into API, background worker, and an opt-in SSRF-isolated headless-Chromium renderer for JS-heavy pages.',
       'The tenancy model is Postgres row-level security bound to an org GUC, with an append-only hash-chained audit log. The worker queue uses SELECT FOR UPDATE SKIP LOCKED with claim-epoch fencing and heartbeats that abort themselves strictly inside the requeue deadline.',
-      'The match engine runs exact and wildcard matching first, then fuzzy matching on residuals (slug Jaccard plus depth and segment alignment), streaming progress to the review table over SSE. Currently mid-build: match engine merged, review interactions in progress, exports next.',
+      'The match engine runs exact and wildcard matching first, then fuzzy matching on residuals (slug Jaccard plus depth and segment alignment), streaming progress to the review table over SSE. The match engine is merged, review interactions are in progress, and exports are next.',
     ],
     diagram:
       'frontend (Next.js + Better Auth)\n        |  EdDSA JWT, 5 min TTL\n        v\napi (Go) ----> Postgres (RLS per org, hash-chained audit)\n        \\\n         worker: sitemap discovery -> BFS crawl -> match engine\n                  \\-> renderer (headless Chromium, SSRF-isolated, opt-in)',
@@ -418,7 +418,7 @@ export const projects: Project[] = [
       'Randomize anything. Any list, any source, twenty-plus methods from roulette wheel to plinko. Descendant of a 2012 original that still lives in og/.',
     body: [
       'Feed in data from any source (typed lists, CSV, Google Sheets, images, Letterboxd and Goodreads RSS, Wikipedia, number ranges) and pick a method: roulette wheel, card draw, slot machine, amidakuji ladder, single-elimination tournament, team splitter, sort race, canvas-physics plinko, and more. Results record to local history and any list can travel as a share link.',
-      'Around the tool sit The Entropy Press, short articles on how the randomness actually works, and Discover, nine channels pulling random things live from public APIs. There is also a documented URL scheme for sharing lists and verdicts.',
+      'The tool also includes The Entropy Press, with short articles on how the randomness works, and Discover, with nine channels pulling random things from public APIs. There is also a documented URL scheme for sharing lists and verdicts.',
       'The design is monochrome like the 2010 original: ink on warm paper, halftone dots, hard offset shadows, the original BPdots brand font. This is a rebuild of the first website I ever made, in 2012, to help my brothers and me pick a movie. The original site is preserved in the og/ directory.',
     ],
     changelog: [
@@ -543,7 +543,7 @@ export const projects: Project[] = [
     summary:
       'Self-hosted web client for Resend. Compose, contacts, broadcasts, a visual template editor, and live delivery events.',
     body: [
-      'Turns a Resend API key into a full email workspace. Sending with delivery tracking, batch sends to hundreds of recipients, contacts with audiences and segments, scheduled broadcasts, and domain management with DNS verification.',
+      'Turns a Resend API key into a full email workspace. It handles delivery tracking, batch sends to hundreds of recipients, contacts and segments, scheduled broadcasts, and domain management with DNS verification.',
       'Templates come two ways, a Monaco code editor for HTML and React Email or a visual block-based builder with starter presets. Delivery webhooks stream into the UI live over SSE. The API key is encrypted at rest, and the whole thing runs on Docker Compose or Kubernetes.',
     ],
     changelog: [
