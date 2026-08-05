@@ -66,6 +66,20 @@ export default async function ProjectPage({ params }: Props) {
         )}
       </div>
 
+      {project.banner && (
+        <a href={project.url} target="_blank" rel="noreferrer" className="no-arrow block">
+          <Image
+            src={project.banner}
+            alt={`${project.name} website`}
+            width={1600}
+            height={600}
+            priority
+            className="h-auto w-full"
+            style={{ border: '1px solid var(--line)' }}
+          />
+        </a>
+      )}
+
       <div
         className="flex flex-col gap-[6px] px-[14px] py-3 text-xs"
         style={{ background: 'var(--panel-deep)', border: '1px solid var(--line)' }}

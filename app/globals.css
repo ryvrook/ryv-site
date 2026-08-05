@@ -98,7 +98,7 @@ a:hover {
   color: var(--text-bright);
 }
 
-a[target='_blank']::after {
+a[target='_blank']:not(.no-arrow)::after {
   content: '↗';
   display: inline-block;
   margin-left: 0.25em;

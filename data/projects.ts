@@ -18,6 +18,8 @@ export type Project = {
   mirror?: { href: string; label: string };
   // Square brand mark or representative project image.
   image?: string;
+  // Wide hero capture of the live site, shown at the top of the project page.
+  banner?: string;
   summary: string;
   body: string[];
   diagram?: string;
@@ -35,6 +37,7 @@ export const projects: Project[] = [
     pinned: true,
     pinnedOrder: 2,
     url: 'https://flockdirectories.com',
+    banner: '/projects/flock-directories-banner.webp',
     repo: 'https://github.com/ryvrook/flockdirectories',
     image: '/projects/flock-logo.png',
     summary:
@@ -61,6 +64,7 @@ export const projects: Project[] = [
     complexity: 3,
     pinned: false,
     url: 'https://askfriday.ryvrook.com',
+    banner: '/projects/friday-bot-banner.webp',
     repo: 'https://github.com/ryvrook/friday-bot',
     image: '/projects/friday-logo.png',
     summary:
@@ -87,6 +91,7 @@ export const projects: Project[] = [
     url: 'https://boobies.ryvrook.com',
     repo: 'https://github.com/ryvrook/boobies-media',
     image: '/projects/boobies-media-logo.png',
+    banner: '/projects/boobies-media-banner.webp',
     summary:
       'Private media library for a small group, with resumable uploads, remote ingestion, folders, tags, share pages, and automatic thumbnails.',
     body: [
@@ -111,6 +116,7 @@ export const projects: Project[] = [
     pinned: false,
     url: 'https://boobies.ryvrook.com',
     repo: 'https://github.com/ryvrook/booby-bot',
+    banner: '/projects/boobies-media-banner.webp',
     summary:
       'Discord bot that saves attachments and supported media links into a boobies-media library through reactions, watched channels, commands, and message actions.',
     body: [
@@ -122,6 +128,27 @@ export const projects: Project[] = [
       { date: '2026-07-29', message: 'accepted typed folder paths in command options' },
       { date: '2026-07-29', message: 'documented usage, administration, and deployment' },
       { date: '2026-07-29', message: 'fixed the container build after a dependency revert' },
+    ],
+  },
+  {
+    slug: 'aut-script',
+    name: 'AUT Script',
+    status: 'ACTIVE',
+    lang: 'Go',
+    updated: '2026-07-30',
+    complexity: 4,
+    pinned: false,
+    summary:
+      'Linux CLI for recording, running, and scheduling durable browser workflows against a dedicated Chrome profile. One binary, journaled runs, resumable.',
+    body: [
+      'A command-line application that records browser workflows and runs them as compiled Go programs against a dedicated Chrome or Chromium profile. The recorder produces a reviewable draft rather than something that executes blind, and captured POST requests can be converted into reviewable request workflow drafts the same way.',
+      'Runs are durable and auditable. Every step is journaled, outputs are checkpointed, and an interrupted run can be inspected, paused, resumed, or aborted rather than silently restarted. A cross-process browser lease keeps concurrent invocations from fighting over the same profile.',
+      'The read-only side does data harvesting: a persistent scheduler keeps harvested values fresh, everything lands in SQLite with diagnostics, and freshness checks tell you when a value has gone stale. Workflow inputs are supported at runtime, including secret inputs that are never persisted.',
+    ],
+    changelog: [
+      { date: '2026-07-30', message: 'renamed the project and binary to AUT Script' },
+      { date: '2026-07-28', message: 'completed recording and request workflow tooling' },
+      { date: '2026-07-27', message: 'harvest scheduling and freshness safeguards' },
     ],
   },
   {
@@ -155,6 +182,7 @@ export const projects: Project[] = [
     complexity: 2,
     pinned: false,
     url: 'https://nef.ryvrook.com',
+    banner: '/projects/nef-list-banner.webp',
     repo: 'https://github.com/ryvrook/nef-list',
     summary:
       'Stupid list for friends. Drop your name, pfp, socials, and a message. No accounts, dark mode only, one plain-JS file on Cloudflare Workers + D1.',
@@ -195,6 +223,7 @@ export const projects: Project[] = [
     pinned: true,
     pinnedOrder: 4,
     url: 'https://vectordns.dev',
+    banner: '/projects/enterprise-vectordns-banner.webp',
     image: '/projects/vectordns-logo.png',
     summary:
       'Enterprise DNS monitoring in a single Go binary. REST API, WebSockets, admin panel, org dashboard. No microservices, no JS build step.',
@@ -219,6 +248,7 @@ export const projects: Project[] = [
     pinned: true,
     pinnedOrder: 6,
     url: 'https://roadrunnerlog.com',
+    banner: '/projects/roadrunner-banner.webp',
     image: '/projects/roadrunner-logo.png',
     summary:
       'Self-hosted maintenance logbook for every vehicle you own. Service records, parts, costs, odometer history, file uploads.',
@@ -263,6 +293,7 @@ export const projects: Project[] = [
     pinned: true,
     pinnedOrder: 9,
     url: 'https://qwuickswap.com',
+    banner: '/projects/qwuickswap-banner.webp',
     image: '/projects/qwuickswap-logo.png',
     summary:
       'Self-hosted media multitool. Image conversion runs in the browser on WASM codecs, video trims and audio extraction run server-side through ffmpeg.',
@@ -328,6 +359,7 @@ export const projects: Project[] = [
     complexity: 3,
     pinned: false,
     url: 'https://ternix.org',
+    banner: '/projects/ternix-banner.webp',
     image: '/projects/ternix-logo.png',
     summary:
       'Build a NixOS config in the browser from real nixpkgs data, then push it to your repo as a pull request. Btw, this project sucks.',
@@ -396,6 +428,7 @@ export const projects: Project[] = [
     pinned: true,
     pinnedOrder: 7,
     url: 'https://swallowtail.app',
+    banner: '/projects/swallowtail-banner.webp',
     image: '/projects/swallowtail-logo.svg',
     summary:
       'Multi-tenant redirect-mapping SaaS. Upload an old sitemap, get back a CSV or htaccess of 301s with deterministic wildcard pattern detection.',
@@ -421,6 +454,7 @@ export const projects: Project[] = [
     complexity: 1,
     pinned: false,
     url: 'https://corviddata.com',
+    banner: '/projects/corviddata-banner.webp',
     summary: 'Landing page for Corvid Data LLC.',
     body: [
       'Landing page for Corvid Data LLC. Services, branding, contact. Small on purpose.',
@@ -439,6 +473,7 @@ export const projects: Project[] = [
     pinned: true,
     pinnedOrder: 5,
     url: 'https://therandomizr.com',
+    banner: '/projects/randomizr-banner.webp',
     repo: 'https://github.com/ryvrook/Randomizr',
     image: '/projects/randomizr-logo.svg',
     summary:
@@ -501,6 +536,7 @@ export const projects: Project[] = [
     complexity: 4,
     pinned: false,
     url: 'https://vectordns.io',
+    banner: '/projects/vectordns-banner.webp',
     image: '/projects/vectordns-logo.png',
     summary:
       'DNS lookup, WHOIS, and domain monitoring platform. Tracks DNS changes over time with visual diffs, plus teams and Stripe billing.',
