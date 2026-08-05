@@ -26,6 +26,33 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: 'flock-directories',
+    name: 'Flock Directories',
+    status: 'ACTIVE',
+    lang: 'TypeScript',
+    updated: '2026-08-04',
+    complexity: 4,
+    pinned: true,
+    pinnedOrder: 2,
+    url: 'https://flockdirectories.com',
+    repo: 'https://github.com/ryvrook/flockdirectories',
+    image: '/projects/flock-logo.png',
+    summary:
+      'Template for running many independent local business directories, where one validated data file becomes a static site on its own domain.',
+    body: [
+      'A network of focused local business directories and the template they all come from. One directory is one schema-validated JSON file holding brand, taxonomy, locations, guides, editorial landing pages, and every business record, so adding a directory means writing data rather than copying page components.',
+      'Each site lives on its own branch and builds to plain static files, which means a deployed directory needs no Node runtime and no database. Sites are never hosted together and never share a deployment. A shared tenant-scoped Postgres source of truth is available for the point where centralized editing and rebuild automation beat hand-authored files.',
+      'The product rules are the interesting part. Verification, claimed, featured, and sponsored stay four distinct states, payment never buys verification or organic ranking, and every listing carries the source behind its record along with the open data license that source requires. Only approved category and location pairs produce public pages, so filter URLs never compete with real ones.',
+      'Contributions come in through a Cloudflare Worker that either queues each entry in D1 behind a moderation token or mails it to a verified address, and nothing publishes automatically either way. Two properties run on the template so far, a Columbus tree care directory and a Columbus pet care directory with 112 reviewed listings. The network is an offshoot of Corvid Data LLC.',
+    ],
+    changelog: [
+      { date: '2026-08-04', message: 'contributions worker can deliver by email instead of a database' },
+      { date: '2026-08-04', message: 'launched the Columbus pet care directory with 112 reviewed listings' },
+      { date: '2026-08-04', message: 'published the network landing page' },
+      { date: '2026-08-01', message: 'initial directory template with schema validation and static builds' },
+    ],
+  },
+  {
     slug: 'friday-bot',
     name: 'AskFriday Bot',
     status: 'ACTIVE',
@@ -105,7 +132,7 @@ export const projects: Project[] = [
     updated: '2026-07-26',
     complexity: 3,
     pinned: true,
-    pinnedOrder: 2,
+    pinnedOrder: 3,
     repo: 'https://github.com/ryvrook/dotfiles',
     summary:
       'Flake-based NixOS system configuration plus GNU Stow-managed application dotfiles, with physical-host and disposable QEMU VM targets.',
@@ -166,7 +193,7 @@ export const projects: Project[] = [
     updated: '2026-07-15',
     complexity: 4,
     pinned: true,
-    pinnedOrder: 3,
+    pinnedOrder: 4,
     url: 'https://vectordns.dev',
     image: '/projects/vectordns-logo.png',
     summary:
@@ -190,7 +217,7 @@ export const projects: Project[] = [
     updated: '2026-07-13',
     complexity: 3,
     pinned: true,
-    pinnedOrder: 5,
+    pinnedOrder: 6,
     url: 'https://roadrunnerlog.com',
     image: '/projects/roadrunner-logo.png',
     summary:
@@ -213,7 +240,7 @@ export const projects: Project[] = [
     updated: '2026-07-13',
     complexity: 3,
     pinned: true,
-    pinnedOrder: 7,
+    pinnedOrder: 8,
     summary:
       'Website scanner for SEO readiness and AI-search readiness. Crawls a site, runs a catalog of checks, produces a diffable JSON report.',
     body: [
@@ -234,7 +261,7 @@ export const projects: Project[] = [
     updated: '2026-07-04',
     complexity: 3,
     pinned: true,
-    pinnedOrder: 8,
+    pinnedOrder: 9,
     url: 'https://qwuickswap.com',
     image: '/projects/qwuickswap-logo.png',
     summary:
@@ -367,7 +394,7 @@ export const projects: Project[] = [
     updated: '2026-06-23',
     complexity: 4,
     pinned: true,
-    pinnedOrder: 6,
+    pinnedOrder: 7,
     url: 'https://swallowtail.app',
     image: '/projects/swallowtail-logo.svg',
     summary:
@@ -410,7 +437,7 @@ export const projects: Project[] = [
     updated: '2026-06-14',
     complexity: 3,
     pinned: true,
-    pinnedOrder: 4,
+    pinnedOrder: 5,
     url: 'https://therandomizr.com',
     repo: 'https://github.com/ryvrook/Randomizr',
     image: '/projects/randomizr-logo.svg',
