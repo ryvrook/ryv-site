@@ -37,7 +37,7 @@ export const site = {
     },
     {
       date: '2026-08-05',
-      text: 'Added live-site banners to project pages, so each write-up links straight to its running deployment.',
+      text: 'Added live-site banners to the project pages on this site, so each write-up links straight to its running deployment.',
       href: '/projects/this-site',
       label: 'this site',
     },
