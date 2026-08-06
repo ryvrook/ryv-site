@@ -30,16 +30,16 @@ export const site = {
   ],
   recent: [
     {
-      date: '2026-08-04',
-      text: 'Launched the Columbus pet care directory with 112 reviewed listings, each one carrying the source behind its record.',
-      href: '/projects/flock-directories',
-      label: 'Flock Directories',
+      date: '2026-08-05',
+      text: 'Wrote up AUT Script, a Linux CLI that records browser workflows and replays them as durable, journaled runs against a dedicated Chrome profile.',
+      href: '/projects/aut-script',
+      label: 'AUT Script',
     },
     {
-      date: '2026-08-04',
-      text: 'Gave sites a way to receive contribution entries by email instead of running a moderation database.',
-      href: '/projects/flock-directories',
-      label: 'Flock Directories',
+      date: '2026-08-05',
+      text: 'Added live-site banners to project pages, so each write-up links straight to its running deployment.',
+      href: '/projects/this-site',
+      label: 'this site',
     },
     {
       date: '2026-08-01',
