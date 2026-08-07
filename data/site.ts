@@ -24,11 +24,23 @@ export const site = {
   avatar: 'https://avatars.githubusercontent.com/u/29802327?v=4' as string | null,
   bio: 'I build software mostly to find out how things work, which means I end up rebuilding a lot of things other people consider solved.',
   now: [
-    'Building focused local business directories on the Flock Directories template.',
-    'Standing up the Columbus pet care and tree care sites on their own domains.',
+    'Building Direct Flock, the control plane that runs every Flock Directories site from one dashboard.',
+    'Hardening the Flock Directories template after collapsing all the site branches onto main.',
     'Moving my daily setup into a flake-based NixOS configuration.',
   ],
   recent: [
+    {
+      date: '2026-08-06',
+      text: 'Built Direct Flock, a control plane dashboard that scaffolds, releases, and monitors the whole flock of directory sites from one place.',
+      href: '/projects/directflock',
+      label: 'Direct Flock',
+    },
+    {
+      date: '2026-08-06',
+      text: 'Collapsed every Flock Directories site branch onto main, so one working tree now builds and ships every site in the flock.',
+      href: '/projects/flock-directories',
+      label: 'Flock Directories',
+    },
     {
       date: '2026-08-05',
       text: 'Wrote up AUT Script, a Linux CLI that records browser workflows and replays them as durable, journaled runs against a dedicated Chrome profile.',
@@ -46,18 +58,6 @@ export const site = {
       text: 'Published the Flock Directories template, where one validated data file builds a whole directory site.',
       href: '/projects/flock-directories',
       label: 'Flock Directories',
-    },
-    {
-      date: '2026-07-27',
-      text: 'Released Friday Bot, a private-server Discord bot with contextual slash commands, mentions, replies, and per-server model settings.',
-      href: '/projects/friday-bot',
-      label: 'Friday Bot',
-    },
-    {
-      date: '2026-07-26',
-      text: 'Published my dotfiles, a flake-based NixOS configuration with Stow-managed app settings and a disposable QEMU target.',
-      href: '/projects/dotfiles',
-      label: 'dotfiles',
     },
   ] as RecentEntry[],
   copyrightYears: '2012-2026',
