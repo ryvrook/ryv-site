@@ -154,15 +154,19 @@ export default async function ProjectPage({ params }: Props) {
       </div>
 
       {project.diagram && (
-        <div>
-          <div className="sec-label mb-[10px]">ARCHITECTURE</div>
+        <details className="arch">
+          <summary className="sec-label">
+            <span className="arch-caret" aria-hidden="true" />
+            ARCHITECTURE
+            <span className="arch-hint" aria-hidden="true" />
+          </summary>
           <pre
             className="term"
             style={{ fontSize: '10.5px', lineHeight: 1.45, color: 'var(--text-dim)' }}
           >
             {project.diagram}
           </pre>
-        </div>
+        </details>
       )}
 
       <div>

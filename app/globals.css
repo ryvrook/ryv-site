@@ -198,6 +198,55 @@ pre.term {
   overflow-x: auto;
 }
 
+/* Collapsible architecture diagram. Native <details>, so it needs no JS
+   and still works on the static export. */
+.arch > summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.arch > summary::-webkit-details-marker {
+  display: none;
+}
+.arch > summary:hover {
+  color: var(--text-mid);
+}
+.arch[open] > summary {
+  margin-bottom: 10px;
+}
+.arch > summary:focus-visible {
+  outline: 1px solid var(--cyan);
+  outline-offset: 3px;
+}
+.arch-caret {
+  color: var(--cyan);
+}
+.arch-caret::before {
+  content: '>';
+}
+.arch[open] .arch-caret::before {
+  content: 'v';
+}
+.arch-hint {
+  margin-left: auto;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+}
+.arch:not([open]) .arch-hint::before {
+  content: '[ click to show diagram ]';
+}
+.arch[open] .arch-hint::before {
+  content: '[ hide ]';
+}
+.arch > summary:hover .arch-caret,
+.arch > summary:hover .arch-hint {
+  color: var(--cyan-bright);
+}
+
 /* Markdown post body. */
 .post-body {
   display: flex;
