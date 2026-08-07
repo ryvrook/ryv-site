@@ -46,8 +46,58 @@ export const projects: Project[] = [
       'A new site goes from nothing to a live custom domain as one job. The wizard explores real Overture data for the chosen industry, generates a validated preset, runs the acquisition, ingests what the crawl found as draft listings, curates the drafts, and provisions the Cloudflare Pages project. The deployments page then compares what each production domain actually serves against the latest build-affecting commit and flags any site that has fallen behind.',
       'It runs on my Dokploy VPS with Postgres holding operational data only. Job history, build and deploy records, and acquisition run links live in the database, while git stays the audit trail for content and secrets stay in the deployment environment.',
     ],
-    diagram:
-      'Direct Flock (dashboard, Next.js + Bun on the VPS)\n   |            |                    |\n   v            v                    v\nscrape_flock   flockdirectories    Cloudflare Pages\nacquisition    template scripts    one project per site,\nruns           validate, release   stale-build checks',
+    diagram: `  operator
+    |
+    |  cloudflare access policy -> cloudflared tunnel
+    |  the container publishes no ports of its own
+    v
++--------------------------------------------------------------------+
+| DIRECT FLOCK            next.js + bun · docker on a dokploy vps    |
++--------------------------------------------------------------------+
+| /new       /site/[dir]    /acquire     /jobs      /deployments     |
+| scaffold   editors+gate   presets      run log    drift check      |
+|    |            |            |            |            |           |
+|    +------------+-----+------+------------+------------+           |
+|                       |                                            |
+|                       v                                            |
+| job runner · 12 kinds · every step journaled, logs on /data        |
+| release-class jobs take a single slot; cancel signals the child    |
++---------------------|----------------------------------------------+
+                      | spawns child processes, cwd = a git tree
+         +------------+--+-------------+------------------+
+         v               v             v                  v
+ +--------------+ +------------+ +-----------+ +--------------------+
+ | scrape_flock | | flock      | | claude    | | wrangler           |
+ | cli          | | template   | | code cli  | | + cf rest api      |
+ |              | | scripts    | |           | |                    |
+ | explore      | |            | | drafts    | | create pages proj  |
+ | plan         | | scaffold   | | guides,   | | deploy the build   |
+ | crawl        | | compose    | | landing   | | attach a domain    |
+ | ingest       | | validate   | | pages,    | | poll until active  |
+ |              | | --launch   | | seo copy  | | fetch / + verify   |
+ | overture     | | release    | |           | |                    |
+ | + duckdb     | |            | |           | |                    |
+ +-------|------+ +------|-----+ +-----|-----+ +----------|---------+
+         +-------+-------+-------------+                  |
+                 v                                        v
+ +---------------------------------+   +-----------------------------+
+ | git working trees on /data      |   | cloudflare pages            |
+ |                                 |   |                             |
+ | a validated directory.json per  |   | one project per site, plain |
+ | site, written only through the  |   | static output, no node      |
+ | canonical serializer            |   | runtime, its own domain     |
+ | commit + push -> github         |   +-----------------------------+
+ | = the content audit trail       |                  |
+ +---------------------------------+                  | polled from
+                                                      | outside
+ +---------------------------------+                  v
+ | postgres 17 · ops data only     |   +-----------------------------+
+ |                                 |   | monitor worker (cf worker)  |
+ | job history, build and deploy   |   |                             |
+ | records, acquisition run links. |   | every ten minutes; a status |
+ | never content, never secrets    |   | change emails, /deployments |
+ +---------------------------------+   | reads it for drift checks   |
+                                       +-----------------------------+`,
     changelog: [
       { date: '2026-08-06', message: 'curate a site\'s draft listings and publish what stands up' },
       { date: '2026-08-06', message: 'take a site from scaffold to a live custom domain as one job' },
@@ -175,6 +225,44 @@ export const projects: Project[] = [
       'Runs are durable and auditable. Every step is journaled, outputs are checkpointed, and an interrupted run can be inspected, paused, resumed, or aborted rather than silently restarted. A cross-process browser lease keeps concurrent invocations from fighting over the same profile.',
       'The read-only side does data harvesting: a persistent scheduler keeps harvested values fresh, everything lands in SQLite with diagnostics, and freshness checks tell you when a value has gone stale. Workflow inputs are supported at runtime, including secret inputs that are never persisted.',
     ],
+    diagram: `                        +------------------------+
+                        | aut · one go binary    |
+                        | a linux cli            |
+                        +-----------|------------+
+            +-----------------------+-----------------------+
+            v                       v                       v
+ +---------------------+ +---------------------+ +---------------------+
+ | record              | | run                 | | harvest             |
+ |                     | |                     | |                     |
+ | drive the browser   | | each workflow is a  | | the read-only side  |
+ | once; the recorder  | | compiled go program | | of the tool         |
+ | emits a reviewable  | |                     | |                     |
+ | draft, never a      | | inputs supplied at  | | a persistent        |
+ | blind replay        | | run time; secret    | | scheduler keeps     |
+ |                     | | inputs are never    | | values fresh and    |
+ | captured POSTs      | | persisted           | | freshness checks    |
+ | become request      | |                     | | flag a stale one    |
+ | workflow drafts too | |                     | |                     |
+ +----------|----------+ +----------|----------+ +----------|----------+
+            +-------+---------------+                       |
+                    v                                       |
+   +---------------------------------+                      |
+   | dedicated chrome / chromium     |                      |
+   | profile                         |                      |
+   |                                 |                      |
+   | a cross-process lease means     |                      |
+   | two invocations never fight     |                      |
+   | over the same profile           |                      |
+   +----------------|----------------+                      |
+                    |                                       |
+                    v                                       v
++----------------------------------------------------------------------+
+| sqlite                                                               |
+|                                                                      |
+| run journal, one row per step  ->  inspect, pause, resume, or        |
+| checkpointed step outputs          abort an interrupted run          |
+| harvested values + diagnostics     rather than restart it blind      |
++----------------------------------------------------------------------+`,
     changelog: [
       { date: '2026-07-30', message: 'renamed the project and binary to AUT Script' },
       { date: '2026-07-28', message: 'completed recording and request workflow tooling' },
@@ -262,6 +350,58 @@ export const projects: Project[] = [
       'Org-scoped access control, webhook integrations, and append-style audit logging all live in the same binary. Ships as a Docker Compose stack with PostgreSQL, Redis, Prometheus, and Grafana. Staging and production modes enforce strict security checks like verify-full Postgres TLS.',
       'The current push is monitoring quality. Status transitions now get recorded as history, a daily sweep catches expiring domains, and flapping domains auto-throttle down to daily checks with a per-domain override.',
     ],
+    diagram: ` browser dashboard      api clients, go sdk,      status pages on
+ (htmx) + admin         vdns-cli, ~189 org        customer domains
+ panel                  routes                    (txt-verified)
+        |                      |                         |
+        +----------------------+----+--------------------+
+                                    v
++----------------------------------------------------------------------+
+| built-in acme listener · cloudflare origin ca + authenticated        |
+| origin pulls · X-Forwarded-For honoured only from TRUSTED_PROXIES    |
+| host routing: MAIN_HOST is the app, any other host is a status page  |
++-----------------------------------|----------------------------------+
+                                    v
++======================================================================+
+| ENTERPRISE VECTORDNS      one go binary, no js build step            |
+|                           embedded migrations, templates, assets     |
++----------------------------------------------------------------------+
+| middleware  csp nonces · session-bound csrf · rbac · per-org rate    |
+|             limits · rls guc bind · rfc 7807 problem responses       |
+|                                                                      |
+| surfaces    rest api · htmx dashboard · admin panel · /docs          |
+|             /ws, six org channels · /metrics behind basic auth       |
+|                                                                      |
+| scheduler   dns cadence by plan 8h/2h/1h/10min · flap auto-          |
+|             throttle · cert scan · ct poll · whois + expiry          |
+|             sweep · subdomain discovery · health recompute           |
+|                                                                      |
+| queue       redis streams jobs · 12h analytics rollups · nightly     |
+|             prune, retention sweeps, stripe reconciliation           |
++=======|=================================================|============+
+        | state                                           | egress
+        v                                                 v
+ +---------------------------------+ +---------------------------------+
+ | postgres 16                     | | dns egress                      |
+ |                                 | |                                 |
+ | row-level security per org      | | ~24 public resolvers, 6 regions |
+ | hmac hash-chained audit log     | | rdap / whois, team cymru asn    |
+ | aes-256-gcm on secret columns   | | crt.sh transparency logs        |
+ +---------------------------------+ +---------------------------------+
+ | redis 7                         | | byo-key enrichment              |
+ |                                 | |                                 |
+ | rate limits, streams job queue  | | securitytrails, whoisxml, whoxy |
+ +---------------------------------+ +---------------------------------+
+ | ha profile                      | | fan-out                         |
+ |                                 | |                                 |
+ | pgbouncer in transaction mode,  | | webhooks, hmac-sha256 signed,   |
+ | redis primary + 2 replicas      | | ssrf-guarded · smtp · siem push |
+ | + 3 sentinels                   | | · stripe billing events         |
+ +---------------------------------+ +---------------------------------+
+
+ /metrics -> prometheus -> grafana
+   a per-org proxy rewrites promql to force-inject org_id, so
+   one tenant can never read another tenant's series`,
     changelog: [
       { date: '2026-07-15', message: 'status transition history, partial snapshot sync, daily expiry sweep' },
       { date: '2026-07-06', message: 'auto-throttle flapping domains to daily checks' },
@@ -308,6 +448,40 @@ export const projects: Project[] = [
       'One Docker image contains a Bun server on a Playwright/Chromium base, serving both the API and SPA, with Postgres alongside it. Migrations run on boot and interrupted scans recover automatically. It runs behind Dokploy with Cloudflare in front. The runbook covers the SSRF guard, egress hardening, and backups.',
       'The schedules management page just landed, which wraps up phase 7 of the build.',
     ],
+    diagram: `  a scan is started by hand or by the schedules page
+    |
+    v
++--------------------------------------------------------------------+
+| TREECREEPER      one docker image: a bun server on a               |
+|                  playwright / chromium base, api + spa in          |
+|                  one process, postgres alongside it                |
++--------------------------------------------------------------------+
+| scheduler   recurring scans; an interrupted scan is recovered      |
+|             automatically instead of silently restarting           |
+|      |                                                             |
+|      v                                                             |
+| crawler     ssrf guard on every fetch, hardened egress,            |
+|             chromium renders the page before checks run            |
+|      |                                                             |
+|      v                                                             |
+| catalog     classic seo readiness · ai-search readiness,           |
+|             one catalog of checks run over the crawl               |
+|      |                                                             |
+|      v                                                             |
+| report      one diffable json document per scan, so a site         |
+|             can be tracked check over check                        |
++-----|--------------------------------------------------------------+
+      |
+      v
++------------------------------------+  +------------------------------+
+| postgres                           |  | edge                         |
+|                                    |  |                              |
+| migrations run on boot             |  | cloudflare                   |
+| scan state, reports, schedules     |  |    -> dokploy                |
+| nightly backups                    |  |    -> the container          |
++------------------------------------+  |                              |
+                                        | no exposed app port          |
+                                        +------------------------------+`,
     changelog: [
       { date: '2026-07-13', message: 'schedules management page, phase 7 complete' },
       { date: '2026-07-13', message: 'dokploy and cloudflare deployment runbook' },
@@ -467,8 +641,55 @@ export const projects: Project[] = [
       'The tenancy model is Postgres row-level security bound to an org GUC, with an append-only hash-chained audit log. The worker queue uses SELECT FOR UPDATE SKIP LOCKED with claim-epoch fencing and heartbeats that abort themselves strictly inside the requeue deadline.',
       'The match engine runs exact and wildcard matching first, then fuzzy matching on residuals (slug Jaccard plus depth and segment alignment), streaming progress to the review table over SSE. The match engine is merged, review interactions are in progress, and exports are next.',
     ],
-    diagram:
-      'frontend (Next.js + Better Auth)\n        |  EdDSA JWT, 5 min TTL\n        v\napi (Go) ----> Postgres (RLS per org, hash-chained audit)\n        \\\n         worker: sitemap discovery -> BFS crawl -> match engine\n                  \\-> renderer (headless Chromium, SSRF-isolated, opt-in)',
+    diagram: `  operator uploads the sitemap of the site being migrated
+    |
+    v
++--------------------------------------------------------------------+
+| frontend        next.js · better auth · org switcher               |
++--------------------------------------------------------------------+
+    |  eddsa jwt, 5 minute ttl
+    v
++--------------------------------------------------------------------+
+| api (go)        org-scoped rest · enqueues work · streams sse      |
++-----|---------------------------------------------------|----------+
+      |  claim: select for update skip locked,            |
+      |  claim-epoch fencing, heartbeats that             |  sse
+      |  abort strictly inside the requeue deadline       |  progress
+      v                                                   |
++---------------------------------------------+           |
+| worker (go)                                 |           |
+|                                             |           |
+| sitemap discovery                           |           |
+|       |  robots, common roots               |           |
+|       v                                     |           |
+| bfs crawl ---> +----------------------+     |           |
+|       |        | renderer, opt-in     |     |           |
+|       |        | headless chromium in |     |           |
+|       |        | an ssrf-isolated     |     |           |
+|       |        | sandbox, for js-     |     |           |
+|       |        | heavy pages          |     |           |
+|       |        +----------------------+     |           |
+|       v                                     |           |
+| match engine                                |           |
+|   1 exact      old path == new path         |           |
+|   2 wildcard   deterministic patterns       |           |
+|   3 fuzzy      residuals only: slug         |           |
+|                jaccard + depth +            |           |
+|                segment alignment            |           |
++------------------|--------------------------+           |
+                   |                                      |
+                   v                                      v
++----------------------------------+        +--------------------------+
+| postgres                         |        | review table             |
+|                                  |        |                          |
+| row-level security bound to an   |        | rows land as the engine  |
+| org guc                          |        | streams them             |
+| append-only hash-chained audit   |        +--------------------------+
+| job queue tables                 |                     |
++----------------------------------+                     |
+                                                         v
+                                            exports: csv · htaccess
+                                                     · nginx rules`,
     changelog: [
       { date: '2026-06-23', message: 'per-side URL CSV download, admin cap override' },
       { date: '2026-06-20', message: 'optional headless rendering with SSRF-isolated renderer' },
