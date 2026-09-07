@@ -32,18 +32,21 @@ export const projects: Project[] = [
     name: 'Direct Flock',
     status: 'ACTIVE',
     lang: 'TypeScript',
-    updated: '2026-08-06',
+    updated: '2026-08-31',
     complexity: 4,
     pinned: true,
     pinnedOrder: 2,
     repo: 'https://github.com/ryvrook/directflock',
     image: '/projects/directflock-logo.svg',
     summary:
-      'Control plane for the Flock Directories network. One dashboard scaffolds, builds, releases, and monitors every directory site from a single working tree.',
+      'Operator dashboard for the Flock Directories network and the production line around it: acquisition, lead research, site audits, outreach, generation, release, and monitoring.',
     body: [
       'A single-operator dashboard that runs the whole flock. It sits over the Flock Directories template and the acquisition pipeline, so scaffolding a site, drafting its content, building it, releasing it, and watching its deployment all happen in one place instead of a pile of terminal sessions.',
       'The dashboard never becomes a second source of truth. Site content stays in each directory\'s validated JSON file, written only through the template\'s canonical serializer, and every change lands as a git commit. When work needs doing, Direct Flock shells out to the template\'s own scripts and the pipeline\'s CLI as child processes, so each tree\'s own validators always apply.',
       'A new site goes from nothing to a live custom domain as one job. The wizard explores real Overture data for the chosen industry, generates a validated preset, runs the acquisition, ingests what the crawl found as draft listings, curates the drafts, and provisions the Cloudflare Pages project. The deployments page then compares what each production domain actually serves against the latest build-affecting commit and flags any site that has fallen behind.',
+      'The same business records now feed a lead center. Direct Flock imports acquisitions and directories into consolidated records, audits their existing sites with quoted evidence, scores the opportunities, drafts grounded outreach, and can hand a qualified prospect to Wrensmith as a versioned site brief. Twenty CRM workflows sit at the other end when a lead needs to leave the dashboard.',
+      'Acquisition mappings carry crawled service areas and social links into directory imports. The mapping can also be generated from the command line, with a report of unresolved categories and locations before anything is ingested.',
+      'Site generation is evidence-first rather than a one-shot prompt. It carries a real design system and copy mode into the build, reads the generated site back whole, refuses unreadable sources, and can continue or repair a generation that stopped short of its plan.',
       'It runs on my Dokploy VPS with Postgres holding operational data only. Job history, build and deploy records, and acquisition run links live in the database, while git stays the audit trail for content and secrets stay in the deployment environment.',
     ],
     diagram: `  operator
@@ -99,6 +102,13 @@ export const projects: Project[] = [
  +---------------------------------+   | reads it for drift checks   |
                                        +-----------------------------+`,
     changelog: [
+      { date: '2026-08-31', message: 'added command-line mapping generation and checks for the acquisition handoff' },
+      { date: '2026-08-31', message: 'carried crawled service areas and social links into directory mappings' },
+      { date: '2026-08-16', message: 'continue and repair site generations that stop short of the plan' },
+      { date: '2026-08-14', message: 'ground site generation in evidence, copy modes, and a real design system' },
+      { date: '2026-08-14', message: 'add Twenty CRM sync and workflow definitions' },
+      { date: '2026-08-13', message: 'show the full production line on one page per site' },
+      { date: '2026-08-09', message: 'audit, score, and consolidate prospects before handing them to Wrensmith' },
       { date: '2026-08-06', message: 'curate a site\'s draft listings and publish what stands up' },
       { date: '2026-08-06', message: 'take a site from scaffold to a live custom domain as one job' },
       { date: '2026-08-06', message: 'generate industry presets from the vendored Overture taxonomy' },
@@ -110,7 +120,7 @@ export const projects: Project[] = [
     name: 'Flock Directories',
     status: 'ACTIVE',
     lang: 'TypeScript',
-    updated: '2026-08-06',
+    updated: '2026-09-01',
     complexity: 4,
     pinned: true,
     pinnedOrder: 3,
@@ -124,9 +134,61 @@ export const projects: Project[] = [
       'A network of focused local business directories and the template they all come from. One directory is one schema-validated JSON file holding brand, taxonomy, locations, guides, editorial landing pages, and every business record, so adding a directory means writing data rather than copying page components.',
       'Every site now lives in its own directory on main, so one working tree builds them all and a template fix reaches every site at once. Each directory still builds to plain static files, which means a deployed site needs no Node runtime and no database, and sites are never hosted together and never share a deployment.',
       'The product rules are the interesting part. Verification, claimed, featured, and sponsored stay four distinct states, payment never buys verification or organic ranking, and every listing carries the source behind its record along with the open data license that source requires. Only approved category and location pairs produce public pages, so filter URLs never compete with real ones.',
-      'Contributions come in through a Cloudflare Worker that either queues each entry in D1 behind a moderation token or mails it to a verified address, and nothing publishes automatically either way. Four properties run on the template so far, all in Columbus, and the network is an offshoot of Corvid Data LLC. Direct Flock now operates the whole flock from one dashboard.',
+      'The flock has moved beyond its first Columbus directories. The same template now supports regional directories such as the Virginia meadery list and newer service directories for tree care and septic services, while Direct Flock operates all of them from one dashboard.',
+      'The template now treats discovery and page quality as build requirements. It emits complete structured-data graphs, crawlable category and location hubs, and agent-facing discovery artifacts; thin listing pages stay out of the index, and a separate readiness gate catches sites that are not ready for ads or crawlers.',
     ],
+    diagram: `  operator / Direct Flock         acquisition export + mapping
+           |                                  |
+           +----------------+-----------------+
+                            v
++------------------------------------------------------------------+
+| FLOCK DIRECTORIES     one shared template, one working tree      |
+|                                                                  |
+| directories/<id>/directory.json + per-site logos                 |
+| brand, taxonomy, locations, guides, pages, sourced listings      |
+|                                                                  |
+| ingest as drafts -> review -> publish                            |
+| all content writers use the canonical serializer                 |
++------------------------------------------------------------------+
+                            |
+                            v
++------------------------------------------------------------------+
+| validate schema + references + launch requirements               |
+| compile the selected brand; stage only that site's logos         |
++------------------------------------------------------------------+
+                            |
+             +--------------+---------------+
+             v                              v
+ +------------------------+   +----------------------------+
+ | compiled manifest      |   | optional Postgres import   |
+ | in-memory store        |   | tenant-scoped build data    |
+ +-----------+------------+   +-------------+--------------+
+             +--------------+---------------+
+                            v
++------------------------------------------------------------------+
+| DirectoryStore -> shared Next.js pages -> static export          |
+|                                                                  |
+| listing pages, approved category/location hubs, guides           |
+| structured data, sitemap, robots, discovery artifacts            |
++------------------------------------------------------------------+
+                            |
+                            v
++------------------------------------------------------------------+
+| out/ -> one Cloudflare Pages project per directory               |
+| each site has its own deployment and custom domain               |
+| public pages need no Node process or database at runtime         |
++------------------------------------------------------------------+
+
+  optional browser forms -> contributions worker -> moderation
+  submitted changes are reviewed before a content rebuild`,
     changelog: [
+      { date: '2026-09-01', message: 'published 142 reviewed septic service listings' },
+      { date: '2026-08-31', message: 'accepted JSON and delimited list fields on import and rejected empty taxonomy mappings' },
+      { date: '2026-08-24', message: 'scaffolded the septic services directory from a new industry preset' },
+      { date: '2026-08-18', message: 'completed listing enrichment for the tree care directory' },
+      { date: '2026-08-16', message: 'deepened listing descriptions from source evidence and gated thin pages' },
+      { date: '2026-08-13', message: 'added agent discovery, structured data graphs, and crawlable taxonomy hubs' },
+      { date: '2026-08-08', message: 'expanded the meadery directory across Virginia' },
       { date: '2026-08-06', message: 'collapsed every site branch onto main, one tree builds all sites' },
       { date: '2026-08-06', message: 'per-brand compile and per-site logo staging keep builds flat' },
       { date: '2026-08-04', message: 'contributions worker can deliver by email instead of a database' },
@@ -140,7 +202,7 @@ export const projects: Project[] = [
     name: 'AskFriday Bot',
     status: 'ACTIVE',
     lang: 'TypeScript',
-    updated: '2026-07-27',
+    updated: '2026-08-20',
     complexity: 3,
     pinned: false,
     url: 'https://askfriday.ryvrook.com',
@@ -165,7 +227,7 @@ export const projects: Project[] = [
     name: 'Boobies Media',
     status: 'ACTIVE',
     lang: 'Go',
-    updated: '2026-07-27',
+    updated: '2026-08-20',
     complexity: 4,
     pinned: false,
     url: 'https://boobies.ryvrook.com',
@@ -175,11 +237,12 @@ export const projects: Project[] = [
     summary:
       'Private media library for a small group, with resumable uploads, remote ingestion, folders, tags, share pages, and automatic thumbnails.',
     body: [
-      'A private image and video library built for a small group. It accepts chunked, resumable uploads as well as remote links from Discord, Twitter/X, YouTube, TikTok, and Medal, then probes the media, generates thumbnails, and deduplicates it by content.',
+      'A private image and video library built for a small group. It accepts files, whole folders, ZIP archives, chunked resumable uploads, and remote links from Discord, Twitter/X, YouTube, TikTok, and Medal, then probes the media, generates thumbnails, and deduplicates it by content.',
       'The library has folders, tags, search, bulk actions, anonymous share pages with Discord-friendly embeds, and user administration. External downloads are handled as background jobs with SSRF protections, and missing media tools degrade only the features that need them.',
       'The server is a single Go application with an embedded TypeScript interface and SQLite storage. It ships as a production container for Dokploy behind a Cloudflare Tunnel, with nightly rotating backups and no publicly exposed application port.',
     ],
     changelog: [
+      { date: '2026-08-20', message: 'added folder and ZIP archive uploads' },
       { date: '2026-07-27', message: 'fixed Discord embeds for animated media' },
       { date: '2026-07-26', message: 'added remote-ingestion fallbacks and media tooling checks' },
       { date: '2026-07-23', message: 'initial private media library release' },
@@ -336,7 +399,7 @@ export const projects: Project[] = [
     name: 'enterprise-vectordns',
     status: 'ACTIVE',
     lang: 'Go',
-    updated: '2026-07-15',
+    updated: '2026-08-31',
     complexity: 4,
     pinned: true,
     pinnedOrder: 5,
@@ -346,9 +409,10 @@ export const projects: Project[] = [
     summary:
       'Enterprise DNS monitoring in a single Go binary. REST API, WebSockets, admin panel, org dashboard. No microservices, no JS build step.',
     body: [
-      'VectorDNS rebuilt for enterprise use as one Go binary that serves everything. The same process handles the REST API, WebSocket change notifications, the admin panel, and an org-facing dashboard rendered with htmx. No microservices, no JavaScript build step, no external auth providers.',
+      'VectorDNS rebuilt for enterprise use as one Go binary that serves everything. The same process handles the REST API, WebSocket change notifications, the admin panel, and an org-facing dashboard rendered with htmx. No microservices and no JavaScript build step. Accounts can also enter through Corvid ID while the application keeps its own organization and permission boundaries.',
       'Org-scoped access control, webhook integrations, and append-style audit logging all live in the same binary. Ships as a Docker Compose stack with PostgreSQL, Redis, Prometheus, and Grafana. Staging and production modes enforce strict security checks like verify-full Postgres TLS.',
-      'The current push is monitoring quality. Status transitions now get recorded as history, a daily sweep catches expiring domains, and flapping domains auto-throttle down to daily checks with a per-domain override.',
+      'The recent work has been the less visible enterprise layer: contracted billing and capacity statements, TOTP and recovery codes, SSO boundaries, retention guarantees, queue recovery, operational digests, external health checks, and acceptance tests around export and disaster recovery.',
+      'Monitoring quality still sits underneath all of it. DNS, certificate, and WHOIS scanners now canonicalize what they observe, record how each fact was captured, and refuse to turn scanner noise into a fabricated history change.',
     ],
     diagram: ` browser dashboard      api clients, go sdk,      status pages on
  (htmx) + admin         vdns-cli, ~189 org        customer domains
@@ -403,6 +467,10 @@ export const projects: Project[] = [
    a per-org proxy rewrites promql to force-inject org_id, so
    one tenant can never read another tenant's series`,
     changelog: [
+      { date: '2026-08-31', message: 'hardened DNS, certificate, and WHOIS history against fabricated changes' },
+      { date: '2026-08-20', message: 'closed tenant-boundary gaps across admin, billing, jobs, webhooks, and realtime' },
+      { date: '2026-08-18', message: 'added Corvid ID sign-in and product-network reporting' },
+      { date: '2026-08-12', message: 'shipped enterprise billing, two-factor auth, retention, recovery, and acceptance tests' },
       { date: '2026-07-15', message: 'status transition history, partial snapshot sync, daily expiry sweep' },
       { date: '2026-07-06', message: 'auto-throttle flapping domains to daily checks' },
       { date: '2026-07-06', message: 'htmx redirects converted to HX-Redirect' },
@@ -413,7 +481,7 @@ export const projects: Project[] = [
     name: 'roadrunner',
     status: 'ACTIVE',
     lang: 'JavaScript',
-    updated: '2026-07-13',
+    updated: '2026-09-05',
     complexity: 3,
     pinned: true,
     pinnedOrder: 7,
@@ -421,13 +489,16 @@ export const projects: Project[] = [
     banner: '/projects/roadrunner-banner.webp',
     image: '/projects/roadrunner-logo.png',
     summary:
-      'Self-hosted maintenance logbook for every vehicle you own. Service records, parts, costs, odometer history, file uploads.',
+      'Maintenance logbook for every vehicle you own, on web and mobile. Service records, parts, costs, odometer history, file uploads.',
     body: [
       'Tracks maintenance for bicycles, motorcycles, cars, and trucks. Service records, parts used, costs, odometer readings, and file uploads (OBD-II dumps, receipts, photos, manuals). It replaces the "replaced oil at 82,450 mi" note in your phone with structured, searchable history.',
       'Three containers: Postgres 16, an Express API with JWT auth that runs its own migrations on boot, and nginx serving the React SPA. An Expo mobile app talks to the same API. The stack refuses to start without a real JWT secret. There is no insecure default.',
-      'Right now I\'m on the reminders system. Overdue labels show a date or a mileage, and overdue service is visually separated from upcoming.',
+      'Reminders show overdue dates or mileage and export to your calendar. The mobile app now covers the web feature set, including personal parts lists and community guides, with controls for hiding guides and blocking authors. Recent work is focused on iOS release preparation, sign-in, and reliable photo uploads.',
     ],
     changelog: [
+      { date: '2026-09-05', message: 'polished mobile parts lists, photo uploads, and request recovery for iOS release preparation' },
+      { date: '2026-09-03', message: 'added calendar exports, Apple and Facebook sign-in, and community guide moderation' },
+      { date: '2026-09-02', message: 'brought the mobile app to feature parity with web and added a public landing page' },
       { date: '2026-07-13', message: 'overdue reminder labels include date or mileage' },
       { date: '2026-06-26', message: 'reminder list visual pass' },
     ],
@@ -437,7 +508,7 @@ export const projects: Project[] = [
     name: 'treecreeper',
     status: 'EXPERIMENTAL',
     lang: 'TypeScript',
-    updated: '2026-07-13',
+    updated: '2026-08-17',
     complexity: 3,
     pinned: true,
     pinnedOrder: 9,
@@ -446,7 +517,7 @@ export const projects: Project[] = [
     body: [
       'Crawls a site and runs a catalog of checks covering classic SEO readiness and the newer question of AI-search readiness, then produces a diffable JSON report so you can track a site check-over-check.',
       'One Docker image contains a Bun server on a Playwright/Chromium base, serving both the API and SPA, with Postgres alongside it. Migrations run on boot and interrupted scans recover automatically. It runs behind Dokploy with Cloudflare in front. The runbook covers the SSRF guard, egress hardening, and backups.',
-      'The schedules management page just landed, which wraps up phase 7 of the build.',
+      'Recurring scans are managed through the schedules page. Reports distinguish unmeasured categories from low scores, and the image optimizer shows thumbnail previews. The service can also run behind the Corvid gateway in pass-through mode.',
     ],
     diagram: `  a scan is started by hand or by the schedules page
     |
@@ -483,6 +554,8 @@ export const projects: Project[] = [
                                         | no exposed app port          |
                                         +------------------------------+`,
     changelog: [
+      { date: '2026-08-17', message: 'added pass-through operation behind the Corvid gateway' },
+      { date: '2026-07-22', message: 'added image previews and kept unmeasured categories distinct in reports and comparisons' },
       { date: '2026-07-13', message: 'schedules management page, phase 7 complete' },
       { date: '2026-07-13', message: 'dokploy and cloudflare deployment runbook' },
     ],
@@ -536,7 +609,7 @@ export const projects: Project[] = [
     name: 'this site',
     status: 'ACTIVE',
     lang: 'TypeScript',
-    updated: '2026-07-17',
+    updated: '2026-09-06',
     complexity: 1,
     pinned: true,
     pinnedOrder: 1,
@@ -549,6 +622,9 @@ export const projects: Project[] = [
       'It grew up in my old portfolio repo through a heavier "personal OS" concept before this design replaced it with a single column and fewer ideas. Now it lives in its own repo, which is where the old one felt it deserved to end up.',
     ],
     changelog: [
+      { date: '2026-09-06', message: 'refreshed Now, Recent, and project entries from recent development history' },
+      { date: '2026-08-07', message: 'added collapsible architecture diagrams to five project pages' },
+      { date: '2026-08-06', message: 'published a post on how Direct Flock runs the flock' },
       { date: '2026-07-17', message: 'moved to its own repo, posts are markdown now' },
       { date: '2026-07-17', message: 'terminal redesign, file-based content' },
       { date: '2026-07-03', message: 'personal-os iteration' },
@@ -559,7 +635,7 @@ export const projects: Project[] = [
     name: 'ternix',
     status: 'STABLE',
     lang: 'TypeScript',
-    updated: '2026-07-02',
+    updated: '2026-08-21',
     complexity: 3,
     pinned: false,
     url: 'https://ternix.org',
@@ -573,6 +649,7 @@ export const projects: Project[] = [
       'All data comes from official sources (the search.nixos.org index, the rendered Home-Manager manual). If a source is down the UI says so rather than showing fake results.',
     ],
     changelog: [
+      { date: '2026-08-21', message: 'hardened application security boundaries' },
       { date: '2026-07-02', message: 'preset gallery, HM option browsing, builder UI overhaul' },
       { date: '2026-07-02', message: 'nix generation overhaul: configs work out of the box' },
     ],
@@ -582,17 +659,22 @@ export const projects: Project[] = [
     name: 'wrensmith',
     status: 'EXPERIMENTAL',
     lang: 'TypeScript',
-    updated: '2026-07-02',
-    complexity: 3,
+    updated: '2026-08-31',
+    complexity: 4,
     pinned: false,
     image: '/projects/wrensmith-logo.png',
     summary:
-      'Tooling behind a freelance website service. An operator workbench plus a research layer that grounds every site in keyword strategy and positioning.',
+      'Website production engine that turns a versioned business handoff into a grounded client site, then safely carries later drafts into an existing build.',
     body: [
-      'The workbench side manages business profiles, documents, logos, and previews for client sites, with an attention view that surfaces exactly which facts are still missing from a profile.',
-      'Underneath, keyword strategy and positioning research feed into every generation prompt, so a client site starts from its actual market rather than a template.',
+      'Wrensmith takes a versioned handoff containing the business evidence, offer, positioning, and site brief, then creates and tracks the client site through generation and preview. Industry manifests define what each kind of site can accept, and every generated project exposes agent-ready artifacts rather than hiding its structure inside a prompt.',
+      'The engine can use multiple model transports per generation, including authenticated CLI transports, while the dashboard records which transport actually ran and what it cost. Production runs as a small set of containerized services backed by Postgres, with idempotent mutation routes and a durable generation queue.',
+      'It now handles existing sites as well as new ones. A draft update is applied through a bounded workflow that preserves the site around it, giving the operator a safe revision path instead of asking the model to regenerate everything.',
     ],
     changelog: [
+      { date: '2026-08-31', message: 'added safe draft updates for existing sites' },
+      { date: '2026-08-21', message: 'added production services, idempotent APIs, and per-generation model transports' },
+      { date: '2026-08-21', message: 'registered Wrensmith with the Corvid product network' },
+      { date: '2026-08-13', message: 'shipped the handoff-driven site creation, tracking, and preview pipeline' },
       { date: '2026-06-11', message: 'research layer: keyword strategy and positioning' },
       { date: '2026-06-11', message: 'operator workbench: document saves, logo upload, fresh previews' },
     ],
@@ -627,7 +709,7 @@ export const projects: Project[] = [
     name: 'Swallowtail',
     status: 'STABLE',
     lang: 'Go',
-    updated: '2026-06-23',
+    updated: '2026-08-17',
     complexity: 4,
     pinned: true,
     pinnedOrder: 8,
@@ -691,9 +773,70 @@ export const projects: Project[] = [
                                             exports: csv · htaccess
                                                      · nginx rules`,
     changelog: [
+      { date: '2026-08-17', message: 'accepted authenticated Corvid gateway requests on read routes' },
       { date: '2026-06-23', message: 'per-side URL CSV download, admin cap override' },
       { date: '2026-06-20', message: 'optional headless rendering with SSRF-isolated renderer' },
       { date: '2026-06-19', message: 'sitemap autodiscovery, full-site crawler' },
+    ],
+  },
+  {
+    slug: 'corvid-platform',
+    name: 'Corvid Platform',
+    status: 'ACTIVE',
+    lang: 'Go',
+    updated: '2026-08-31',
+    complexity: 4,
+    pinned: false,
+    summary:
+      'Shared API gateway and operator console for the Corvid product network. API keys, consumers, usage metering, jobs, leads, and deployments.',
+    body: [
+      'A shared platform for the Corvid product APIs. One Go binary handles the authenticated gateway, consumer and API key management, usage metering, and upstream health checks, while a Next.js console provides the operator interface.',
+      'Direct Flock runs as a product service behind the gateway. The console brings its sites, acquisitions, leads, jobs, mappings, and deployments into one workspace, alongside the other registered products. Recent work added clearer job outcomes, mapping review, deployment readiness, and existing-site update workflows.',
+    ],
+    diagram: `  operator browser                         API consumers
+         |                                       |
+         v                                       |
+  Next.js admin console                          |
+         | Clerk JWT                             | API key
+         v                                       v
++------------------------------------------------------------------+
+| CORVID PLATFORM          Go service behind Cloudflare Tunnel     |
+|                                                                  |
+| /admin/v1/*                  /apis/{product}/*                   |
+| products, consumers, keys    authenticated product gateway       |
+| jobs, leads, deployments     entitlements, quotas, rate limits   |
+|                                                                  |
+| background work: usage batches, rollups, retention, health       |
++------------------------------------------------------------------+
+         |                                       |
+         v                                       v
+ +------------------------+   +----------------------------+
+ | platform Postgres      |   | registered product APIs    |
+ | consumers, keys, plans |   | private upstream services  |
+ | usage, audit, registry |   | over corvid-products       |
+ +------------------------+   +-------------+--------------+
+                                            |
+             +------------------------------+
+             |                              |
+             v                              v
+ +------------------------+   +----------------------------+
+ | Direct Flock           |   | other product services     |
+ | sites, leads, mappings |   | Treecreeper, Starling,      |
+ | acquisition + jobs     |   | Lyrebird, VectorDNS, ...   |
+ +-----------+------------+   +-------------+--------------+
+             |                              |
+             v                              v
+ +------------------------+   +----------------------------+
+ | template working trees |   | product-owned data         |
+ | build + deploy tools   |   | APIs and workers keep      |
+ | git content history    |   | their domain state         |
+ +------------------------+   +----------------------------+
+
+  products report metrics and health back to the platform
+  platform and products keep separate database boundaries
+  the gateway reaches product data through HTTP, not shared SQL`,
+    changelog: [
+      { date: '2026-08-31', message: 'expanded operator workflows with job outcomes, mapping review, deployment readiness, and site updates' },
     ],
   },
   {
@@ -701,7 +844,7 @@ export const projects: Project[] = [
     name: 'corviddata',
     status: 'STABLE',
     lang: 'TypeScript',
-    updated: '2026-06-16',
+    updated: '2026-08-05',
     complexity: 1,
     pinned: false,
     url: 'https://corviddata.com',
@@ -711,6 +854,7 @@ export const projects: Project[] = [
       'Landing page for Corvid Data LLC. Services, branding, contact. Small on purpose.',
     ],
     changelog: [
+      { date: '2026-08-05', message: 'added Flock Directories to the system map' },
       { date: '2026-06-16', message: 'services and logo update' },
     ],
   },
