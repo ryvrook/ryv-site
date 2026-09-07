@@ -15,7 +15,7 @@ native side makes the provider request, which avoids trying to do it through
 Discord's browser-like renderer.
 
 It can use an API key or an already signed-in provider CLI. In CLI mode, Friday
-just starts the process and reads its answer. The CLI handles its own login;
+just starts the process and reads its answer. The CLI handles its own login.
 Friday doesn't need to go looking for the token.
 
 The problem was that all of this lived in my client. Nobody else in the server
@@ -23,13 +23,13 @@ could ask Friday anything. So I made a bot.
 
 ## Asking from the channel
 
-The straightforward version is a slash command:
+The straightforward version is a slash command.
 
 ```text
 /ask question:Why does DNS propagation take time?
 ```
 
-You can also mention Friday, or reply to a message with:
+You can also mention Friday, or reply to a message like this.
 
 ```text
 Friday, is this true?
@@ -48,7 +48,7 @@ I change one.
 
 I don't want an expensive model answering every small question in a Discord
 channel. Each server gets a saved provider and model choice, and its admins
-can change both through the command picker:
+can change both through the command picker.
 
 ```text
 /friday provider set

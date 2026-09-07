@@ -8,19 +8,19 @@ tags: [meta]
 Opening paragraph. Put the thing you learned or measured up front. The reader
 decides in one paragraph whether to stay.
 
-Inline formatting works: **bold**, *italics*, `inline code`, and
+Inline formatting supports **bold**, *italics*, `inline code`, and
 [links](https://example.com).
 
 ## A section heading
 
-Code and ascii diagrams go in fenced blocks, whitespace preserved:
+Code and ascii diagrams go in fenced blocks with whitespace preserved.
 
 ```
 code or ascii diagrams go in pre blocks
 whitespace   is   preserved
 ```
 
-Images use normal markdown syntax and pick up the framed style:
+Images use normal markdown syntax and pick up the framed style.
 
 ![alt text describing the image](/images/example.png)
 

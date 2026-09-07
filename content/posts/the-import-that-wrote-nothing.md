@@ -20,7 +20,7 @@ to know where to put it.
 ## The example mapping was still an example
 
 The export carries source categories and locality names. The directory uses
-its own category and location slugs. A mapping connects the two:
+its own category and location slugs. A mapping connects the two.
 
 ```json
 {
@@ -53,13 +53,13 @@ Service areas and social profiles had another problem. The crawler was
 collecting them, but the generated mapping left those columns out because the
 importer couldn't read the lists inside them.
 
-A service-area cell, after the CSV parser had read it, could contain:
+A service-area cell, after the CSV parser had read it, could look like this.
 
 ```text
 ["Columbus","Dublin"]
 ```
 
-The importer expected this:
+The importer expected this.
 
 ```text
 Columbus|Dublin
@@ -68,7 +68,7 @@ Columbus|Dublin
 Split the first one on a pipe and you still have one string, brackets and all.
 There aren't two place names to look up.
 
-I added a `json` transform ahead of the existing split:
+I added a `json` transform ahead of the existing split.
 
 ```json
 {
@@ -91,7 +91,7 @@ keep an otherwise usable business out of the import.
 ## The command the docs needed
 
 The dashboard already had the mapping generator, so I exposed it through a
-script in Direct Flock:
+script in Direct Flock.
 
 ```bash
 bun scripts/generate-mapping.ts --directory <id> --run <run-slug>

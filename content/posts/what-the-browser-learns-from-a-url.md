@@ -23,13 +23,13 @@ RFC 3986 defines the generic syntax for a URI. It is useful protocol grammar, bu
 
 That is what the [WHATWG URL Standard](https://url.spec.whatwg.org/) is for. It defines a state-machine parser, error handling, relative URL resolution, and a serializer. One of its goals is to make parsing as consistent as HTML parsing, including behavior for the odd URLs that already exist across the web ([WHATWG URL goals](https://url.spec.whatwg.org/#goals)).
 
-Take a URL with a little of everything:
+Take a URL with a little of everything.
 
 ```text
 https://user:pass@bücher.example:443/articles/a%20path?q=one%2Ftwo#part-3
 ```
 
-The parsed record looks roughly like this:
+The parsed record looks roughly like this.
 
 | Component | Parsed value | What happened |
 | --- | --- | --- |
@@ -44,13 +44,13 @@ The parsed record looks roughly like this:
 
 Some of this is extraction. Some of it is normalization.
 
-The scheme and ASCII domain are lowercase. The domain goes through IDNA processing. The port is parsed as a number, then set to null when it matches the default for the scheme. That is why this:
+The scheme and ASCII domain are lowercase. The domain goes through IDNA processing. The port is parsed as a number, then set to null when it matches the default for the scheme. That is why the following URL changes when serialized.
 
 ```text
 HTTPS://EXAMPLE.COM:443/
 ```
 
-serializes back to:
+It serializes back to this.
 
 ```text
 https://example.com/
@@ -66,7 +66,7 @@ The standard defines separate encode sets for paths, queries, fragments, user in
 
 This is why decoding a URL too early can be a real bug.
 
-Take an encoded ampersand in a query value:
+Take an encoded ampersand in a query value.
 
 ```javascript
 const query = "q=one%26two"
@@ -79,7 +79,7 @@ console.log(new URLSearchParams(decodeURIComponent(query)).get("q"))
 Decoding the whole query first turns `%26` into a separator before
 `URLSearchParams` can read it as part of the value. Now `two` is a separate
 parameter. The [form parser](https://url.spec.whatwg.org/#concept-urlencoded-parser)
-splits on `&` before it percent-decodes the names and values; doing that work
+splits on `&` before it percent-decodes the names and values. Doing that work
 in the other order changes the result.
 
 I let `URL` separate the components and `URLSearchParams` handle query parameters. Decoding the whole thing up front loses information those parsers need.
@@ -88,7 +88,7 @@ I let `URL` separate the components and `URLSearchParams` handle query parameter
 
 `bücher.example` is readable to a person. It is not the host representation used at the protocol boundary.
 
-For a domain, the URL parser runs the label through the standard's domain-to-ASCII operation. The result here is:
+For a domain, the URL parser runs the label through the standard's domain-to-ASCII operation. Here is the result.
 
 ```text
 xn--bcher-kva.example
@@ -102,7 +102,7 @@ That is a browser UI decision. The parsed host remains the same either way.
 
 For a normal HTTP/1.1 request sent directly to the origin, the request target contains the path and optional query. The host is sent separately in the `Host` field ([RFC 9112 §3.2.1](https://www.rfc-editor.org/rfc/rfc9112.html#section-3.2.1)).
 
-The request from the example might begin like this:
+The request from the example might begin like this.
 
 ```http
 GET /articles/a%20path?q=one%2Ftwo HTTP/1.1
@@ -121,7 +121,7 @@ HTTP/2 and HTTP/3 carry the same basic request information through the `:method`
 
 This is the example I reach for whenever parsing a URL with a regular expression starts to look reasonable.
 
-Runtime: Node.js 20 or a current browser console.
+Run this in Node.js 20 or a current browser console.
 
 ```javascript
 const input = "https://user:pass@example.com:443/a?next=https://evil.test/#x"
@@ -134,7 +134,7 @@ console.log("WHATWG port:", JSON.stringify(real.port))
 console.log("WHATWG query:", real.search)
 ```
 
-It prints:
+It prints the following output.
 
 ```text
 regex host: user
@@ -151,7 +151,7 @@ More capture groups can patch these two cases. Then IPv6, Unicode domains, escap
 
 ## Running a few cases
 
-This version keeps each input next to its output, which makes the normalization easier to see:
+This version keeps each input next to its output, which makes the normalization easier to see.
 
 ```javascript
 const cases = [

@@ -16,7 +16,7 @@ Card tag is me asking for the small summary layout instead of the big banner one
 And oEmbed is what gives you that faint grey "provider, by author" line Discord
 tucks underneath.
 
-So the share page just stuffs all three into its head:
+So the share page just stuffs all three into its head.
 
 ```html
 <meta property="og:title" content="${esc(title)}">

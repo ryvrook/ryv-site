@@ -12,8 +12,8 @@ the right checkout with the right environment every time I wanted to do
 anything.
 
 Direct Flock puts those jobs in a Next.js dashboard on my VPS. It works with
-two repos: `scrape_flock`, which finds and crawls businesses, and
-`flockdirectories`, which turns their records into directory sites. The
+two repos. `scrape_flock` finds and crawls businesses, and
+`flockdirectories` turns their records into directory sites. The
 dashboard starts the work, keeps the logs, and checks what actually deployed.
 
 ```
@@ -64,7 +64,7 @@ inside it. It starts with an industry preset, acquires businesses, imports
 drafts, curates them, builds the site, and provisions Pages and the custom
 domain. Each step has a log to look at when something fails.
 
-The deployments page handles a problem I already managed to have once: a
+The deployments page handles a problem I already managed to have once. A
 security fix landed on main without reaching the live sites. It checks whether
 the deployed commit contains the latest change that affects that site's build.
 If it doesn't, the site is marked behind. Having the fix in git is useful, but
