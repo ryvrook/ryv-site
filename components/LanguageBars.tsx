@@ -26,18 +26,15 @@ export function LanguageBars() {
           return (
             <div
               key={lang.name}
-              className="grid grid-cols-[92px_1fr_48px] items-baseline gap-[14px] text-[12px]"
+              className="grid grid-cols-[minmax(0,1fr)_48px] sm:grid-cols-[92px_minmax(0,1fr)_48px] items-baseline gap-[14px] text-[12px]"
             >
               <span className="text-[11px]" style={{ color: 'var(--text-dim)' }}>
                 {lang.name.toLowerCase()}
               </span>
-              <span className="tracking-[.08em]" aria-hidden>
-                <span style={{ color: COLORS[i % COLORS.length] }}>
-                  {'▮'.repeat(on)}
-                </span>
-                <span style={{ color: 'var(--bar-off)' }}>
-                  {'▮'.repeat(WIDTH - on)}
-                </span>
+              <span className="order-3 col-span-2 flex min-w-0 gap-[2px] sm:order-none sm:col-span-1" aria-hidden="true">
+                {Array.from({ length: WIDTH }, (_, index) => (
+                  <span key={index} style={{ flex: '1 1 0', height: 8, background: index < on ? COLORS[i % COLORS.length] : 'var(--bar-off)' }} />
+                ))}
               </span>
               <span className="text-right text-[11px]" style={{ color: 'var(--text-dim)' }}>
                 {lang.percent.toFixed(1)}%

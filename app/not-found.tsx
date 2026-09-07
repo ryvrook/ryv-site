@@ -11,7 +11,7 @@ export default function NotFound() {
           No such path. Either the link that sent you here is stale, or I
           removed the page.
         </p>
-        <div className="mt-3 text-[11.5px]">
+        <div className="page-actions mt-3 text-[11.5px]">
           <Link href="/">← home</Link>
         </div>
       </div>

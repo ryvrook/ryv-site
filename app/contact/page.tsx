@@ -5,6 +5,7 @@ import { SocialIcon } from '@/components/SocialIcon';
 export const metadata: Metadata = { title: 'contact' };
 
 export default function ContactPage() {
+  const hasEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(site.email);
   const github = site.github.replace(/^https?:\/\//, '');
   return (
     <div className="fade-up flex flex-col gap-[10px]">
@@ -12,24 +13,24 @@ export default function ContactPage() {
         CONTACT
       </div>
       <div
-        className="grid grid-cols-[80px_1fr] gap-3 pt-[14px]"
+        className="contact-row grid grid-cols-[64px_minmax(0,1fr)] items-center gap-3 sm:grid-cols-[80px_minmax(0,1fr)] pt-[14px]"
         style={{ borderTop: '1px solid var(--line)' }}
       >
         <span style={{ color: 'var(--text-dim)' }}>email</span>
-        <a href={`mailto:${site.email}`}>{site.email}</a>
+        {hasEmail ? <a href={`mailto:${site.email}`}>{site.email}</a> : <span style={{ color: 'var(--text-mid)' }}>Not available yet</span>}
       </div>
-      <div className="grid grid-cols-[80px_1fr] gap-3">
+      <div className="contact-row grid grid-cols-[64px_minmax(0,1fr)] items-center gap-3 sm:grid-cols-[80px_minmax(0,1fr)]">
         <span style={{ color: 'var(--text-dim)' }}>github</span>
         <a href={site.github} target="_blank" rel="noreferrer">
           {github}
         </a>
       </div>
-      <div className="grid grid-cols-[80px_1fr] gap-3">
+      <div className="contact-row grid grid-cols-[64px_minmax(0,1fr)] items-center gap-3 sm:grid-cols-[80px_minmax(0,1fr)]">
         <span style={{ color: 'var(--text-dim)' }}>rss</span>
         <a href="/feed.xml">/feed.xml</a>
       </div>
       <div className="mt-2 flex flex-wrap gap-[10px]">
-        {site.socials.map((s) => (
+        {site.socials.filter((s) => s.href !== '#').map((s) => (
           <a
             key={s.label}
             href={s.href}

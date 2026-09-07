@@ -31,8 +31,8 @@ export default function ProjectsPage() {
             <Link
               key={p.slug}
               href={`/projects/${p.slug}`}
-              className={`row-hover relative block px-1 py-[15px] no-underline hover:no-underline ${
-                p.image ? 'pr-[84px]' : ''
+              className={`project-row row-hover relative block px-1 py-5 sm:py-[15px] no-underline hover:no-underline ${
+                p.image ? 'sm:pr-[84px]' : ''
               }`}
               style={{ borderBottom: '1px solid var(--line-soft)', color: 'inherit' }}
             >
@@ -42,11 +42,11 @@ export default function ProjectsPage() {
                   alt=""
                   width={64}
                   height={64}
-                  className="absolute top-[15px] right-1 size-16 object-contain"
+                  className="float-right mb-3 ml-3 size-12 object-contain sm:absolute sm:top-[15px] sm:right-1 sm:m-0 sm:size-16"
                 />
               )}
-              <div className="flex flex-wrap items-baseline gap-3 text-[11px]">
-                <span className="text-[13px] font-semibold" style={{ color: 'var(--text-bright)' }}>
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-[11px]">
+                <span className="w-full text-[15px] font-semibold sm:w-auto sm:text-[13px]" style={{ color: 'var(--text-bright)' }}>
                   {p.name}
                 </span>
                 {p.pinned && (
@@ -57,12 +57,12 @@ export default function ProjectsPage() {
                 <span style={{ color: statusColor[p.status] }}>{p.status}</span>
                 <span style={{ color: 'var(--text-dim)' }}>{p.lang}</span>
                 <span style={{ color: 'var(--text-dim)' }}>{p.updated}</span>
-                <span className="ml-auto" style={{ color: 'var(--text-dim)' }}>
+                <span className="sm:ml-auto" style={{ color: 'var(--text-dim)' }}>
                   complexity <span style={{ color: 'var(--amber)' }}>{bars.on}</span>
                   <span style={{ color: 'var(--bar-off)' }}>{bars.off}</span>
                 </span>
               </div>
-              <p className="mt-[7px] mb-0 text-[12.5px]" style={{ color: 'var(--text-body)' }}>
+              <p className="clear-both mt-[10px] mb-0 text-[14px] sm:clear-none sm:mt-[7px] sm:text-[12.5px]" style={{ color: 'var(--text-body)' }}>
                 {p.summary}
               </p>
               <div className="mt-[6px] text-[11px]" style={{ color: 'var(--text-faint)' }}>

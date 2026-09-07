@@ -64,7 +64,7 @@ function parsePost(filename: string): Post {
     title: String(data.title ?? slug),
     blurb: String(data.blurb ?? ''),
     tags: Array.isArray(data.tags) ? data.tags.map(String) : [],
-    html: marked.parse(content, { async: false }),
+    html: marked.parse(content, { async: false }).replaceAll('<pre>', '<pre tabindex="0" aria-label="Code block">'),
     minutes: Math.max(1, Math.round(words / 200)),
   };
 }

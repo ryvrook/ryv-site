@@ -1,85 +1,76 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
-type ShareButtonProps = {
-  title: string;
-  url: string;
-};
+type ShareButtonProps = { title: string; url: string };
 
 export function ShareButton({ title, url }: ShareButtonProps) {
   const [open, setOpen] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [feedback, setFeedback] = useState('');
   const rootRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const id = useId();
 
   useEffect(() => {
-    function closeMenu(event: MouseEvent) {
+    if (!open) return;
+    function closeOutside(event: PointerEvent) {
       if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
     }
-
     function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape') setOpen(false);
+      if (event.key === 'Escape') {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
     }
-
-    document.addEventListener('mousedown', closeMenu);
+    document.addEventListener('pointerdown', closeOutside);
     document.addEventListener('keydown', closeOnEscape);
     return () => {
-      document.removeEventListener('mousedown', closeMenu);
+      document.removeEventListener('pointerdown', closeOutside);
       document.removeEventListener('keydown', closeOnEscape);
     };
-  }, []);
+  }, [open]);
 
-  async function copyLink() {
-    await navigator.clipboard.writeText(url);
-    setCopied(true);
-    setOpen(false);
-    window.setTimeout(() => setCopied(false), 1800);
+  async function share() {
+    setFeedback('');
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+        return;
+      } catch (error) {
+        if (error instanceof Error && error.name === 'AbortError') return;
+      }
+    }
+    setOpen(current => !current);
   }
 
-  const encodedUrl = encodeURIComponent(url);
-  const encodedTitle = encodeURIComponent(title);
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(url);
+      setFeedback('Link copied');
+      setOpen(false);
+      triggerRef.current?.focus();
+    } catch {
+      setFeedback('Could not copy. Select the link below to copy it manually.');
+    }
+  }
 
   return (
-    <div className="share-control" ref={rootRef}>
-      <button
-        type="button"
-        className="share-trigger"
-        aria-expanded={open}
-        aria-haspopup="menu"
-        onClick={() => setOpen((current) => !current)}
-      >
-        <span aria-hidden="true">↗</span>
-        {copied ? 'copied' : 'share'}
+    <div className="share-control" ref={rootRef} onBlur={event => {
+      if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
+    }}>
+      <button ref={triggerRef} type="button" className="share-trigger" aria-expanded={open} aria-controls={id} onClick={share}>
+        <span aria-hidden="true">↗</span> {feedback === 'Link copied' ? 'copied' : 'share'}
       </button>
-
       {open && (
-        <div className="share-menu" role="menu">
-          <a
-            role="menuitem"
-            href={`https://x.com/intent/post?url=${encodedUrl}&text=${encodedTitle}`}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => setOpen(false)}
-          >
-            x / twitter
-          </a>
-          <a
-            role="menuitem"
-            href={`https://www.reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`}
-            target="_blank"
-            rel="noreferrer"
-            onClick={() => setOpen(false)}
-          >
-            reddit
-          </a>
-          <button type="button" role="menuitem" onClick={copyLink}>
-            discord
-          </button>
-          <button type="button" role="menuitem" onClick={copyLink}>
-            copy link
-          </button>
+        <div id={id} className="share-menu" role="group" aria-label="Share this post">
+          <a href={`https://x.com/intent/post?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>x / twitter</a>
+          <a href={`https://www.reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`} target="_blank" rel="noreferrer" onClick={() => setOpen(false)}>reddit</a>
+          <button type="button" onClick={copyLink}>copy link</button>
+          {feedback.startsWith('Could not') && <p className="share-feedback">{feedback}</p>}
+          {feedback.startsWith('Could not') && <input aria-label="Post link" readOnly value={url} onFocus={event => event.currentTarget.select()} style={{ width: '100%', minWidth: 0, fontSize: 16, padding: 8 }} />}
         </div>
       )}
+      <span className="sr-only" role="status">{feedback}</span>
     </div>
   );
 }

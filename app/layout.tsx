@@ -26,9 +26,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={plexMono.className}>
       <body>
-        <div className="mx-auto flex min-h-screen max-w-[680px] flex-col gap-9 px-6 pt-14 pb-24">
+        <a className="skip-link" href="#main-content">Skip to content</a>
+        <div className="site-shell mx-auto flex min-h-screen max-w-[680px] flex-col gap-7 px-4 pt-6 pb-12 sm:gap-9 sm:px-6 sm:pt-14 sm:pb-24">
           <Header />
-          <main className="flex-1">{children}</main>
+          <main id="main-content" className="min-w-0 flex-1" tabIndex={-1}>{children}</main>
           <Footer />
         </div>
       </body>

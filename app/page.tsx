@@ -23,7 +23,7 @@ function RecentText({ entry }: { entry: RecentEntry }) {
 export default function HomePage() {
   return (
     <div className="fade-up flex flex-col gap-9">
-      <section className="flex items-start gap-5">
+      <section className="flex flex-col items-start gap-5 sm:flex-row">
         <div
           className="shrink-0 p-1"
           style={{ border: '1px solid var(--line)', background: 'var(--panel)' }}
@@ -34,11 +34,11 @@ export default function HomePage() {
               alt={site.name}
               width={160}
               height={160}
-              className="block"
+              className="block size-24 sm:size-40"
             />
           ) : (
             <div
-              className="flex h-40 w-40 items-center justify-center text-[11px]"
+              className="flex size-24 items-center justify-center text-[11px] sm:size-40"
               style={{ color: 'var(--text-faint)' }}
             >
               photo
@@ -70,7 +70,7 @@ export default function HomePage() {
       <section className="flex flex-col gap-2">
         <div className="sec-label">RECENT</div>
         {site.recent.map((entry) => (
-          <div key={`${entry.date}-${entry.text}`} className="grid grid-cols-[92px_1fr] gap-[14px]">
+          <div key={`${entry.date}-${entry.text}`} className="recent-entry grid grid-cols-1 gap-1 py-2 sm:grid-cols-[92px_minmax(0,1fr)] sm:gap-[14px] sm:py-0">
             <span className="text-[11px]" style={{ color: 'var(--text-dim)' }}>
               {entry.date}
             </span>

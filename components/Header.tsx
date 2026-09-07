@@ -29,12 +29,13 @@ export function Header() {
           {site.name}
         </Link>
         <span style={{ color: 'var(--text-dim)' }}>{site.handle}</span>
-        <span className="ml-auto text-[11px]" style={{ color: 'var(--text-dim)' }}>
+        <span className="w-full text-[12px] sm:ml-auto sm:w-auto sm:text-[11px]" style={{ color: 'var(--text-dim)' }}>
           {site.role}
         </span>
       </div>
       <nav
-        className="flex flex-wrap gap-[2px] py-[7px] text-[11.5px] tracking-[.06em]"
+        aria-label="Main navigation"
+        className="site-nav grid grid-cols-4 gap-[2px] text-[13px] tracking-[.04em] sm:flex sm:flex-wrap sm:py-[7px] sm:text-[11.5px] sm:tracking-[.06em]"
         style={{
           borderTop: '1px solid var(--line)',
           borderBottom: '1px solid var(--line)',
@@ -46,6 +47,7 @@ export function Header() {
             href={l.href}
             className="nav-link"
             data-active={isActive(pathname, l.href)}
+            aria-current={isActive(pathname, l.href) ? 'page' : undefined}
           >
             {l.label}
           </Link>

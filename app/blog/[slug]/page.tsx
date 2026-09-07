@@ -48,7 +48,7 @@ export default async function BlogPostPage({ params }: Props) {
 
   return (
     <div className="fade-up flex flex-col gap-5">
-      <div className="text-[11px] tracking-[.06em]" style={{ color: 'var(--text-dim)' }}>
+      <div className="breadcrumb text-[11px] tracking-[.06em]" style={{ color: 'var(--text-dim)' }}>
         <Link href="/blog">blog</Link> / {post.slug}
       </div>
 
@@ -59,8 +59,8 @@ export default async function BlogPostPage({ params }: Props) {
         >
           {post.title}
         </h1>
-        <div className="mt-2 flex items-center gap-4 text-[11px]" style={{ color: 'var(--text-dim)' }}>
-          <div className="flex flex-1 flex-wrap gap-4">
+        <div className="mt-2 flex flex-wrap items-start gap-x-4 gap-y-2 text-[11px]" style={{ color: 'var(--text-dim)' }}>
+          <div className="flex min-w-0 flex-1 flex-wrap gap-x-4 gap-y-1">
             <span>{post.date}</span>
             <span>{post.minutes} min read</span>
             <span style={{ color: 'var(--text-faint)' }}>{formatTags(post.tags)}</span>
@@ -76,11 +76,11 @@ export default async function BlogPostPage({ params }: Props) {
       />
 
       <div
-        className="flex gap-[18px] pt-[14px] text-[11.5px]"
+        className="page-actions flex flex-wrap items-center gap-x-[18px] gap-y-2 pt-[14px] text-[11.5px]"
         style={{ borderTop: '1px solid var(--line-soft)' }}
       >
         <span style={{ color: 'var(--text-faint)' }}>
-          thoughts? <a href={`mailto:${site.email}`}>email me</a>
+          thoughts? <Link href="/contact">get in touch</Link>
         </span>
         <Link href="/blog" className="quiet-link ml-auto">
           ← all entries

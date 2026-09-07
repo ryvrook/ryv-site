@@ -1,7 +1,5 @@
 import { activity, activityGeneratedAt } from '@/data/activity';
 
-const BLOCKS = ['▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
-
 export function ActivityGraph({ slug }: { slug: string }) {
   const allWeeks = activity[slug];
   if (!allWeeks || allWeeks.length === 0) return null;
@@ -23,13 +21,14 @@ export function ActivityGraph({ slug }: { slug: string }) {
         </span>
       </div>
       {total === 0 ? (
-        <div className="text-[11px]" style={{ color: 'var(--text-faint)' }}>
+        <div className="text-xs" style={{ color: 'var(--text-faint)' }}>
           no public commit data yet.
         </div>
       ) : (
         <>
           <div
-            className="text-[15px] leading-none break-all"
+            className="flex h-5 w-full items-end gap-px"
+            role="img"
             aria-label={`${total} commits over the ${label}`}
           >
             {weeks.map((count, i) => {
@@ -42,16 +41,17 @@ export function ActivityGraph({ slug }: { slug: string }) {
                   key={i}
                   title={`${count} commits`}
                   style={{
-                    color: count === 0 ? 'var(--bar-off)' : 'var(--accent)',
+                    flex: '1 1 0',
+                    minWidth: 0,
+                    height: `${2 + level * 2}px`,
+                    background: count === 0 ? 'var(--bar-off)' : 'var(--accent)',
                     opacity: count === 0 ? 1 : 0.45 + 0.55 * (level / 7),
                   }}
-                >
-                  {BLOCKS[level]}
-                </span>
+                />
               );
             })}
           </div>
-          <div className="mt-[6px] flex gap-4 text-[11px]" style={{ color: 'var(--text-faint)' }}>
+          <div className="mt-[6px] flex flex-wrap gap-x-4 gap-y-1 text-xs" style={{ color: 'var(--text-faint)' }}>
             <span>{total} commits</span>
             <span>peak {max}/wk</span>
             <span className="ml-auto">as of {activityGeneratedAt}</span>
