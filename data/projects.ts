@@ -28,6 +28,28 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: 'presentelle',
+    name: 'Presentelle',
+    status: 'EXPERIMENTAL',
+    lang: 'TypeScript / Swift',
+    updated: '2026-09-07',
+    complexity: 4,
+    pinned: false,
+    image: '/projects/presentelle-logo.svg',
+    summary:
+      'Experimental visual thinking workspace connecting physical boards, a durable working record, and AI-assisted drafts that the user reviews and confirms.',
+    body: [
+      'Presentelle is a workspace for developing ideas from a physical board without losing the history behind them. Projects hold sessions, captured boards, pinned checkpoints, corrected records, selected CSV evidence, and editable outputs, so the work can be resumed and revised later.',
+      'The local implementation combines a React web workspace with a Bun and SQLite service. It includes session lifecycle controls, live updates, versioned drafts, portable exports, and local data recovery. Assistant proposals stay separate from confirmed records until the user reviews them.',
+      'Capture work spans a native SwiftUI app with pairing, cropping, and a durable upload queue, plus browser webcam capture. An MCP service exposes scoped session tools intended for the user\'s own supported AI account.',
+      'This is in active development as an experimental private preview. Real provider-account integration and physical-device capture still need validation; the implemented local workflows and automated checks do not establish production readiness.',
+    ],
+    changelog: [
+      { date: '2026-09-07', message: 'added atomic local migrations and operational diagnostics' },
+      { date: '2026-09-07', message: 'implemented session lifecycle, live updates, and traceable assistant drafts' },
+    ],
+  },
+  {
     slug: 'directflock',
     name: 'Direct Flock',
     status: 'ACTIVE',
@@ -200,7 +222,7 @@ export const projects: Project[] = [
   {
     slug: 'friday-bot',
     name: 'AskFriday Bot',
-    status: 'ACTIVE',
+    status: 'STABLE',
     lang: 'TypeScript',
     updated: '2026-08-20',
     complexity: 3,
@@ -251,7 +273,7 @@ export const projects: Project[] = [
   {
     slug: 'booby-bot',
     name: 'booby-bot',
-    status: 'ACTIVE',
+    status: 'STABLE',
     lang: 'Go',
     updated: '2026-07-29',
     complexity: 3,
@@ -276,7 +298,7 @@ export const projects: Project[] = [
   {
     slug: 'aut-script',
     name: 'AUT Script',
-    status: 'ACTIVE',
+    status: 'STABLE',
     lang: 'Go',
     updated: '2026-07-30',
     complexity: 4,
@@ -379,7 +401,7 @@ export const projects: Project[] = [
   {
     slug: 'endpoint-game',
     name: 'endpoint-game',
-    status: 'ACTIVE',
+    status: 'EXPERIMENTAL',
     lang: 'GDScript',
     updated: '2026-07-16',
     complexity: 2,
@@ -657,7 +679,7 @@ export const projects: Project[] = [
   {
     slug: 'wrensmith',
     name: 'wrensmith',
-    status: 'EXPERIMENTAL',
+    status: 'ACTIVE',
     lang: 'TypeScript',
     updated: '2026-08-31',
     complexity: 4,
