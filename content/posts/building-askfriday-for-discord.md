@@ -1,72 +1,84 @@
 ---
 title: Moving AskFriday Into a Discord Bot
 date: 2026-07-27
-blurb: AskFriday began as a reply shortcut in Vencord. The bot keeps the same idea, but puts it somewhere the rest of a server can use.
+blurb: The reply shortcut worked in my Discord client. I wanted the rest of the server to be able to ask Friday things too.
 tags: [discord, ai, typescript, bun]
 ---
 
-AskFriday started with a small interaction. Hover over a Discord message, click a sparkle, and get a possible reply in the compose box.
+AskFriday started as a sparkle button next to a Discord message. Click it and
+a possible reply lands in the compose box. I read it, change whatever needs
+changing, and hit send myself.
 
-The reply stayed a draft. Friday could read the nearby conversation and suggest something that fit, but I still had to look it over and press send. It worked as a writing shortcut rather than another chatbot to talk to.
+That's the Vencord extension. It collects the message I'm replying to and some
+nearby conversation, then hands the request to Vencord's native process. The
+native side makes the provider request, which avoids trying to do it through
+Discord's browser-like renderer.
 
-I built that version as a Vencord extension. The client side collects the message being replied to and some recent conversation around it. The native side sends that context to whichever provider I selected.
+It can use an API key or an already signed-in provider CLI. In CLI mode, Friday
+just starts the process and reads its answer. The CLI handles its own login;
+Friday doesn't need to go looking for the token.
 
-That split is mostly there because Discord's renderer has the same restrictions as a browser. Vencord's native process can make the API request or hand it to a local provider CLI.
+The problem was that all of this lived in my client. Nobody else in the server
+could ask Friday anything. So I made a bot.
 
-The extension works with regular API keys, but it can also use tools like Claude Code and Codex when they are already signed in locally. Friday never needs to dig through a browser session or handle the OAuth token itself. It just asks the CLI to do the work.
+## Asking from the channel
 
-## Moving it out of my client
-
-The extension worked well when I wanted help writing my own reply. The problem was that it only existed inside my Discord client.
-
-If someone else in a server wanted to ask Friday something, they couldn't. So I kept the same context and provider ideas and moved them into a bot that only runs in servers I allow.
-
-There are two ways to ask it something:
+The straightforward version is a slash command:
 
 ```text
 /ask question:Why does DNS propagation take time?
 ```
 
-Or reply to an existing message:
+You can also mention Friday, or reply to a message with:
 
 ```text
 Friday, is this true?
 ```
 
-The second form is the more interesting one. Friday gets the message being replied to along with a limited amount of recent channel history. It can answer based on the conversation that is actually happening instead of treating “is this true?” as a complete question.
+For a reply, the bot gets the original message and a limited amount of recent
+channel history. Otherwise, “is this true?” isn't much of a question. I want it
+to follow what we're talking about without feeding it the entire channel.
 
-The context is bounded on purpose. A bot sitting in a channel does not need an unlimited transcript just to answer one question.
+It only runs in the servers I've allowed and ignores DMs. There's an optional
+user allowlist too. While it's private, the slash commands are registered per
+server, which means I don't have to wait for global registration every time
+I change one.
 
-It also ignores direct messages and refuses to run outside the configured servers. I can restrict it to particular Discord users too. Slash commands are registered per server while the bot is private, so changes show up without waiting for global command registration.
+## Choosing what answers
 
-## Picking a model per server
-
-I did not want every small question going to the largest model available. Checking a claim in a conversation and working through a difficult technical problem are different jobs.
-
-Friday stores a provider and model choice for each server. Administrators choose from the slash-command picker, with readable labels that give a rough idea of cost and capability. They do not need to find and paste a model ID.
+I don't want an expensive model answering every small question in a Discord
+channel. Each server gets a saved provider and model choice, and its admins
+can change both through the command picker:
 
 ```text
 /friday provider set
 /friday model set
 ```
 
-The default matters here. Switching to OpenAI starts with GPT-5.4 mini instead of quietly choosing the largest option.
+The options have readable labels, so nobody has to remember a model ID.
+The OpenAI default in this version is GPT-5.4 mini. A server can choose a
+larger model if it needs one.
 
-Only the provider and model preference belong to the Discord server. API keys and CLI sessions stay on the machine running Friday. Changing a model never moves credentials through Discord.
+The saved settings contain the preferences. API keys and signed-in CLI
+sessions stay on the host. An admin choosing another model in Discord doesn't
+need access to either.
 
-Provider failures needed a little cleanup too. Weekly limits, exhausted sessions, quotas, and rate limits tend to arrive as output written for developers rather than people asking a question in a channel. Friday recognizes the common cases and gives the channel a shorter explanation.
+Provider errors needed some translation as well. A weekly limit, session
+limit, or quota failure can arrive as a wall of CLI output. Friday catches
+the common cases and gives the channel a shorter explanation of what went
+wrong.
 
 ## Keeping it running
 
-The bot is written in TypeScript and runs on Bun. Mine lives behind a small systemd service.
+The bot is TypeScript on Bun, running under systemd on my VPS. An update timer
+checks the main branch. It accepts fast-forward changes, installs the locked
+dependencies, checks and builds the project, then restarts the service.
 
-There is also a one-shot update service that checks the main branch. It only accepts fast-forward changes, installs the locked dependencies, runs the checks, builds the project, and restarts the bot after all of that succeeds.
+A failed check or build leaves the running bot alone. I don't want an update
+breaking the copy people are using.
 
-The bot needs more infrastructure than the extension, but the core behavior did not change much. Friday should read enough of the conversation to be useful, use the provider and model I selected, and do nothing until somebody asks.
-
-The extension is still the better interface when I am writing my own message. It can place a draft directly into the composer and leave the final decision with me.
-
-The bot is better when a server needs a shared answer. Both versions use the same basic idea through different Discord interfaces.
+I still use the extension when I want a draft in my own compose box. The bot
+is for asking something where everyone in the channel can see the answer.
 
 - [AskFriday](https://askfriday.ryvrook.com)
 - [Vencord extension](https://github.com/ryvrook/AskFriday)

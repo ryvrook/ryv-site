@@ -1,30 +1,26 @@
 ---
 title: The Import That Wrote Nothing
 date: 2026-09-06
-blurb: How an unfinished mapping could skip every business in an acquisition export, and the smaller format mismatch that left useful facts behind.
+blurb: The importer could skip every business and still exit successfully. The mapping was the problem.
 tags: [directflock, flock-directories, data, typescript]
 ---
 
-An import can read every row, explain why it skipped each one, and exit
-successfully without adding a single listing.
+The Flock Directories importer had a way to finish successfully without adding
+anything. Give it a file full of businesses and an empty category or location
+mapping, and it would explain why it skipped every row. Then exit normally.
 
-That was a path through the Flock Directories importer. The acquisition pipeline
-could hand it a file full of businesses, but if the mapping's category and
-location tables were empty, none of those businesses had anywhere to go. The
-script printed the skips and finished. The directory had nothing new in it.
+Very thorough about doing nothing.
 
 I wrote about the dashboard around this in
 [How Direct Flock Runs the Flock](/blog/how-direct-flock-runs-the-flock).
-This is the smaller part between the crawler finding a business and the
-template accepting it as a draft listing.
+This part sits between the crawler's export and the directory's draft listings.
+The crawler can find a perfectly usable business, but the importer still needs
+to know where to put it.
 
-## A mapping nobody finished
+## The example mapping was still an example
 
-The acquisition export and the directory use different names for things. The
-export carries source categories and locality names. The directory wants the
-category and location slugs declared in its own data file.
-
-The mapping connects them. A small example looks like this:
+The export carries source categories and locality names. The directory uses
+its own category and location slugs. A mapping connects the two:
 
 ```json
 {
@@ -35,46 +31,44 @@ The mapping connects them. A small example looks like this:
 }
 ```
 
-Those tables belong to a particular directory. The reference mapping leaves
-them empty because it cannot know which categories or places the next site
-will use.
+Those tables depend on the directory. The reference file leaves them empty
+because it can't know what the next site will contain.
 
-The problem was that the documented terminal path pointed at that reference
-file. The dashboard could derive a real mapping from the industry preset and
-the export, but the terminal workflow did not have the same command available.
-Following the instructions could get you an import with no usable taxonomy.
+The terminal instructions pointed at that file. The dashboard could generate
+a filled-in mapping from the industry preset and the export, but there wasn't
+a command for doing the same thing outside the dashboard. Following the docs
+could leave you with two empty tables and a lot of skipped businesses.
 
-So I made the importer check the mapping before it gets to the rows. If a
-required category or location field reads through an empty table, it now
-refuses the mapping and names the table that needs filling in.
+So the importer now checks those tables before it starts reading rows. If a
+required category or location field needs a lookup and that table is empty,
+it stops and tells you which one to fill in.
 
-An individual source category can still be unresolved. That row gets skipped
-with a reason. The empty table is caught earlier, where there is one
-configuration problem to explain instead of a file full of rejected businesses.
+A single unknown category still skips that business with a reason. That's
+useful when some rows don't belong in the directory. An empty lookup table
+needs fixing before any of them have a chance.
 
-## Two ways to write a list
+## The list was in the wrong format
 
-There was another mismatch in the same handoff. The crawler had already
-collected service areas and social profiles, but the generated mapping left
-those columns out because the importer could not unpack their format.
+Service areas and social profiles had another problem. The crawler was
+collecting them, but the generated mapping left those columns out because the
+importer couldn't read the lists inside them.
 
-After reading the CSV cell, a service-area value could look like this:
+A service-area cell, after the CSV parser had read it, could contain:
 
 ```text
 ["Columbus","Dublin"]
 ```
 
-The importer understood delimiter-separated lists:
+The importer expected this:
 
 ```text
 Columbus|Dublin
 ```
 
-Splitting the first value on a pipe gives you one string with brackets and
-quotes still attached. It never becomes two places to look up.
+Split the first one on a pipe and you still have one string, brackets and all.
+There aren't two place names to look up.
 
-I added a `json` transform and kept the existing split transform. A mapping can
-now ask for both:
+I added a `json` transform ahead of the existing split:
 
 ```json
 {
@@ -83,39 +77,37 @@ now ask for both:
 }
 ```
 
-The JSON step unpacks array values. Text it cannot parse passes through, so the
-split step can handle the other format. The same mapping reads either export.
+The JSON step unpacks arrays of simple values. If the text isn't an array it
+can parse, it leaves it alone for the split step. The mapping can read either
+format, and `collapse` cleans up repeated whitespace afterward.
 
-Getting the list out of the cell is only half of it. Each service area still
-has to resolve to a place the directory declares. An unknown area is dropped
-with a note. It does not get folded into the directory's anchor city, because
-a business saying it serves somewhere else is not evidence that it serves here.
+Each service area still has to match a place declared in the directory.
+Unknown areas are dropped and reported. They don't fall back to the anchor
+city. Saying a business serves Dublin doesn't tell me it serves Columbus.
 
-Social links get a similar check. A malformed profile URL is dropped and named
-in the report, so one bad link does not make the validator reject the whole
-import. The business can stay without that link.
+Bad social URLs get dropped and reported too. One malformed link shouldn't
+keep an otherwise usable business out of the import.
 
-## Making the terminal path work too
+## The command the docs needed
 
-Direct Flock now exposes the dashboard's mapping generator as a command:
+The dashboard already had the mapping generator, so I exposed it through a
+script in Direct Flock:
 
 ```bash
 bun scripts/generate-mapping.ts --directory <id> --run <run-slug>
 ```
 
-Run from the Direct Flock checkout, it writes the mapping beside the export and
-prints what it decided: category matches, unresolved codes, locality mappings,
-and service areas it could not keep. It also prints the import command with
-`--dry-run`, so writing the mapping does not immediately change a directory.
+Run it from the Direct Flock checkout. It writes the mapping beside the export
+and lists the category matches, unresolved codes, locality mappings, and
+service areas it couldn't keep. It also prints the import command with
+`--dry-run`. You can inspect what it generated before changing the directory.
 
-I added checks on both sides. The generator is compared against a saved fixture
-mapping. The template runs its real importer against temporary data, including
-both list formats, a bad social URL, an unknown category, and an empty taxonomy
-table.
+The checks now compare the generated mapping with a saved fixture and run the
+real importer against temporary directory data. Both list formats have to
+produce the expected listings. A bad social URL or unknown service area has
+to drop that value, while an unknown required category skips the row.
 
-That last case now fails before a row is processed. The other cases check what
-actually reaches the listing. A command finishing successfully was already
-easy to test. What I needed to know was whether the businesses and the facts
-collected about them made it through.
+And an empty required lookup table has to fail before the first row. Checking
+the exit code alone was how this looked fine in the first place.
 
 [Direct Flock](/projects/directflock) · [Flock Directories](/projects/flock-directories)

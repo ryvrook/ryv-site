@@ -7,19 +7,15 @@ series: from-enter-to-pixels
 seriesOrder: 1
 ---
 
-Press Enter and nothing has touched the network yet.
+Before the browser can load a page, it needs to work out what URL you gave it.
 
 The browser first has to decide whether the text in the address bar is a URL at all. `example.com` probably is. `how does dns work` probably is not. That decision belongs to the address bar and differs between browsers. Chromium calls this part of the browser the omnibox, and it has its own rules for choosing between navigation and search ([Chromium Omnibox](https://chromium.googlesource.com/playground/chromium-org-site/+/refs/heads/main/user-experience/omnibox/index.md)).
 
 This post starts just after that decision. The browser has something it intends to navigate to. Now it needs to turn that string into a form the rest of the browser can use.
 
-## The short version
-
 A URL does not stay a string for long. The parser turns it into a record containing a scheme, username, password, host, port, path, query, and fragment.
 
 That record determines the origin and request target. It also supplies the host and port used by the networking stack. Everything after the `#` stays with the browser and never becomes part of the HTTP request.
-
-A surprising amount of the page load depends on this little record being right.
 
 ## The URL browsers actually parse
 
@@ -60,7 +56,7 @@ serializes back to:
 https://example.com/
 ```
 
-The browser is not tidying the string for display. This is the canonical form produced by the parser and serializer.
+That spelling comes from parsing and serializing the URL. The address bar can make its own choices about how to display it.
 
 ## Percent encoding depends on where you are
 
@@ -70,9 +66,23 @@ The standard defines separate encode sets for paths, queries, fragments, user in
 
 This is why decoding a URL too early can be a real bug.
 
-In the example, `%2F` is part of the query value. It looks like an encoded slash, but it is still data. Decode it before separating the URL into components and that slash can be mistaken for structure. Encode it again and `%2F` becomes `%252F`, which changes what the server gets after one decoding pass.
+Take an encoded ampersand in a query value:
 
-There is no safe global rule that says “decode the URL.” You have to know which component you are working with.
+```javascript
+const query = "q=one%26two"
+console.log(new URLSearchParams(query).get("q"))
+// one&two
+console.log(new URLSearchParams(decodeURIComponent(query)).get("q"))
+// one
+```
+
+Decoding the whole query first turns `%26` into a separator before
+`URLSearchParams` can read it as part of the value. Now `two` is a separate
+parameter. The [form parser](https://url.spec.whatwg.org/#concept-urlencoded-parser)
+splits on `&` before it percent-decodes the names and values; doing that work
+in the other order changes the result.
+
+I let `URL` separate the components and `URLSearchParams` handle query parameters. Decoding the whole thing up front loses information those parsers need.
 
 ## A Unicode host does not stay Unicode
 
@@ -174,9 +184,9 @@ Do not send the full output from that third case to logs, traces, analytics, or 
 
 <span class="path-marker warm">warm path</span>
 
-The parser does the same work on a second visit. There is no parsed-URL cache that lets the browser skip this step.
+A second visit still needs a URL record. Having visited the site before does not change how its scheme, host, path, and query are interpreted.
 
-What changes is what the resulting record can find. The normalized host can match cached DNS state. The origin and the browser's partitioning keys contribute to whether an existing connection can be reused. A stored HSTS policy can also replace an insecure HTTP URL with HTTPS before an insecure request is sent.
+The browser may already have some of the network state it needs. The normalized host can match cached DNS state. The origin and the browser's partitioning keys contribute to whether an existing connection can be reused. A stored HSTS policy can also replace an insecure HTTP URL with HTTPS before an insecure request is sent.
 
 And if only the fragment changed, there may be no network work to reuse at all.
 
@@ -186,4 +196,4 @@ This is only the ordinary HTTP and HTTPS path.
 
 `file:`, `blob:`, non-special schemes, opaque paths, IPv6 details, relative URL resolution, sandboxed origins, and browser anti-spoofing UI all add their own rules. The address bar's choice between search and navigation is also a separate system. It happens before the parsing described here.
 
-The useful part is smaller than all of that. Once the browser decides it has a URL, the string becomes a typed record. The original spelling stops being the source of truth. From this point on, the rest of the page load works from what the parser found.
+For the next part of the page load, the browser has a scheme, a host, a port, and a request target to work with. That gets us far enough to start looking at the connection.

@@ -1,20 +1,20 @@
 ---
 title: How Direct Flock Runs the Flock
 date: 2026-08-06
-blurb: The control plane behind the directory network, and why it shells out instead of importing anything.
+blurb: The dashboard that runs my directories by calling the tools each repo already has.
 tags: [directflock, flock-directories, cloudflare, infrastructure]
 ---
 
-The Flock Directories network is a set of independent static sites. Each one is
-a single validated JSON file inside the template repo, and each one gets its own
-Cloudflare Pages project and its own domain. That design is great for the sites
-and terrible for the operator, because every task used to mean another terminal
-session in the right tree with the right environment.
+Every Flock directory has its own Cloudflare Pages project and domain. Its
+content lives in one validated JSON file in the template repo. I like that
+setup for the sites. Running all of them meant opening another terminal in
+the right checkout with the right environment every time I wanted to do
+anything.
 
-Direct Flock is the fix. It is a Next.js dashboard running on my VPS that acts
-as the control plane over two repos. The template repo builds the sites. The
-acquisition repo crawls the real world and hands over business records. The
-dashboard's job is to drive both and then watch what came out the other end.
+Direct Flock puts those jobs in a Next.js dashboard on my VPS. It works with
+two repos: `scrape_flock`, which finds and crawls businesses, and
+`flockdirectories`, which turns their records into directory sites. The
+dashboard starts the work, keeps the logs, and checks what actually deployed.
 
 ```
                  Direct Flock (dashboard on the VPS)
@@ -46,25 +46,26 @@ dashboard's job is to drive both and then watch what came out the other end.
                                         latest build-affecting commit
 ```
 
-The rule that shapes everything is that files stay canonical. A site's content
-lives in its `directory.json`, written only through the template's own
-serializer and checked by the template's own validators. The dashboard never
-becomes a second writable source of truth. When it needs something done, it
-runs the target repo's scripts as child processes in that repo's tree, so the
-version of the validator that ships with the template is always the one that
-judges the data.
+The dashboard doesn't keep its own copy of a site's content. It edits the
+site's `directory.json` through the template's serializer and runs the
+validators that belong to that checkout.
 
-That choice sounds boring and pays off constantly. Git stays the audit trail
-for every content change. The dashboard's Postgres holds operational data only,
-meaning job history, build and deploy records, and links back to acquisition
-runs. If the dashboard vanished tomorrow, every site would still build from its
-repo exactly as it did before.
+That means starting child processes. When Direct Flock needs to build or
+import something, it calls the repo's script from that repo's working tree.
+I don't have to copy the validation rules into the dashboard and remember to
+update both versions.
 
-As a service, Direct Flock is a job runner with opinions. A new site is one
-job that walks from an industry preset through acquisition, draft ingest,
-curation, release, and Pages provisioning until a custom domain is live.
-The deployments page closes the loop by doing a git ancestor check per site,
-so a site serving a build older than the latest relevant commit gets flagged
-as behind instead of silently drifting. That exact failure happened once, when
-a security fix on main never reached the live sites, and it is the reason the
-check exists.
+Git records the content changes. Postgres holds the job history, build and
+deploy records, and links to acquisition runs. If I stop the dashboard, the
+sites still have everything they need to build from their repos.
+
+Creating a site is one job in the dashboard, though there's a fair amount
+inside it. It starts with an industry preset, acquires businesses, imports
+drafts, curates them, builds the site, and provisions Pages and the custom
+domain. Each step has a log to look at when something fails.
+
+The deployments page handles a problem I already managed to have once: a
+security fix landed on main without reaching the live sites. It checks whether
+the deployed commit contains the latest change that affects that site's build.
+If it doesn't, the site is marked behind. Having the fix in git is useful, but
+I'd also quite like it to be on the website.
