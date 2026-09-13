@@ -30,6 +30,12 @@ export const site = {
   ],
   recent: [
     {
+      date: '2026-09-10',
+      text: 'Finished the local build of Back2Paper, with 233 reviewed lessons across nine tracks and three printable level books.',
+      href: '/projects/back2paper',
+      label: 'Back2Paper',
+    },
+    {
       date: '2026-09-05',
       text: 'Polished Roadrunner on mobile with personal parts lists, iPhone photo uploads, and fixes for stalled requests.',
       href: '/projects/roadrunner',

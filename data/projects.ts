@@ -28,6 +28,35 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    slug: 'back2paper',
+    name: 'Back2Paper',
+    status: 'ACTIVE',
+    lang: 'Go / TypeScript',
+    updated: '2026-09-10',
+    complexity: 5,
+    pinned: false,
+    image: '/projects/back2paper-logo.svg',
+    summary:
+      'Turns official developer documentation into guided reading, paper-and-pen reasoning, online review, and optional practice, with three consolidated level books that print as real PDFs.',
+    body: [
+      'Back2Paper is a learning site built around the idea that some things stick better when you work them out on paper. Every lesson is grounded in the official documentation for its subject, walks the reader through the concept, then hands them a paper exercise before an online review checks their understanding. Reading and printing are free without an account; an account saves progress, bookmarks, notes, and community participation.',
+      'The curriculum covers nine tracks, from web foundations, JavaScript, TypeScript, Go, Python, HTTP, and SQL through development practices and delivery, at Beginner, Intermediate, and Advanced levels. That is 233 published lessons and 291 runnable examples, each snippet extracted from a tested file rather than typed into the prose. Every lesson carries an independent answer-key check and a learning-design review before it is published, and corrections land as new immutable revisions instead of overwriting the old ones.',
+      'The site is a Next.js app over a Go modular monolith: one binary serves the API, runs the background worker, and provides the operator CLI, with PostgreSQL holding sessions, revisions, progress, and search. The content compiler parses Markdown and YAML into both HTML for the reader and Typst for print, so the web pages and the books come from one source model.',
+      'Print is a first-class output rather than a stylesheet. The builder assembles any level, track, or custom selection into an A4 or Letter PDF with embedded fonts, a document outline, and PDF/UA tagging. Each printed lesson carries a QR code pinned to its exact revision, so a reader can scan the page to review online or record the study session, and a newer revision is offered without replacing the one they printed. The three canonical level books run to about 5,500 pages across both paper sizes, and every code panel is checked so it never splits across a page.',
+      'The local build is complete and verified with Go unit and integration suites, cross-browser Playwright runs, accessibility scans, and a PDF pipeline that inspects every specimen. Public release is still ahead: the production domain, editorial sign-off on the policy pages, and a physical print trial remain open.',
+    ],
+    changelog: [
+      { date: '2026-09-10', message: 'rebuilt all six canonical books and recorded final verification and handoff' },
+      { date: '2026-09-10', message: 'added saved collections with revision snapshots and discussion editing' },
+      { date: '2026-09-10', message: 'kept code panels whole on the page and restored missing glyphs in print' },
+      { date: '2026-09-10', message: 'added an official documentation directory with scoped PDF exports' },
+      { date: '2026-09-09', message: 'authored, reviewed, and published all nine Advanced tracks' },
+      { date: '2026-09-09', message: 'built and verified the complete Beginner books in A4 and Letter' },
+      { date: '2026-09-09', message: 'pinned printed QR links and return journeys to the published revision' },
+      { date: '2026-09-09', message: 'added the Go API, worker, content compiler, and Next.js site' },
+    ],
+  },
+  {
     slug: 'presentelle',
     name: 'Presentelle',
     status: 'EXPERIMENTAL',
