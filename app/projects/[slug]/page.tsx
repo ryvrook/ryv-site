@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { projects, getProject } from '@/data/projects';
 import { statusColor } from '@/lib/format';
 import { ActivityGraph } from '@/components/ActivityGraph';
+import { ModList } from '@/components/ModList';
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -24,6 +25,11 @@ export default async function ProjectPage({ params }: Props) {
   const project = getProject(slug);
   if (!project) notFound();
 
+  // Widen the label column when a links row has a long label like curseforge.
+  const row = project.links?.some((link) => link.label.length > 6)
+    ? 'grid grid-cols-[76px_minmax(0,1fr)] items-baseline gap-3 sm:grid-cols-[84px_minmax(0,1fr)]'
+    : 'grid grid-cols-[48px_minmax(0,1fr)] items-baseline gap-3 sm:grid-cols-[64px_minmax(0,1fr)]';
+
   return (
     <div className="fade-up flex flex-col gap-[22px]">
       <div className="breadcrumb text-[11px] tracking-[.06em]" style={{ color: 'var(--text-dim)' }}>
@@ -39,6 +45,11 @@ export default async function ProjectPage({ params }: Props) {
             <span className="text-[11px]" style={{ color: statusColor[project.status] }}>
               ● {project.status}
             </span>
+            {project.tags?.map((tag) => (
+              <span key={tag} className="project-tag text-[11px]">
+                [{tag.toLowerCase().replace(/\s+/g, '-')}]
+              </span>
+            ))}
           </div>
           <div className="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-[11px]" style={{ color: 'var(--text-dim)' }}>
             <span>
@@ -85,9 +96,9 @@ export default async function ProjectPage({ params }: Props) {
         style={{ background: 'var(--panel-deep)', border: '1px solid var(--line)' }}
       >
         {project.url && (
-          <div className="grid grid-cols-[48px_minmax(0,1fr)] items-baseline gap-3 sm:grid-cols-[64px_minmax(0,1fr)]">
+          <div className={row}>
             <span className="text-[11px]" style={{ color: 'var(--text-dim)' }}>
-              url
+              {project.urlLabel ?? 'url'}
             </span>
             <a href={project.url} target="_blank" rel="noreferrer" className="break-all">
               {project.url.replace(/^https?:\/\//, '')}
@@ -95,7 +106,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
         )}
         {project.repo ? (
-          <div className="grid grid-cols-[48px_minmax(0,1fr)] items-baseline gap-3 sm:grid-cols-[64px_minmax(0,1fr)]">
+          <div className={row}>
             <span className="text-[11px]" style={{ color: 'var(--text-dim)' }}>
               clone
             </span>
@@ -103,8 +114,8 @@ export default async function ProjectPage({ params }: Props) {
               {project.repo}.git
             </a>
           </div>
-        ) : (
-          <div className="grid grid-cols-[48px_minmax(0,1fr)] items-baseline gap-3 sm:grid-cols-[64px_minmax(0,1fr)]">
+        ) : !project.mods && (
+          <div className={row}>
             <span className="text-[11px]" style={{ color: 'var(--text-dim)' }}>
               source
             </span>
@@ -112,7 +123,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
         )}
         {project.mirror && (
-          <div className="grid grid-cols-[48px_minmax(0,1fr)] items-baseline gap-3 sm:grid-cols-[64px_minmax(0,1fr)]">
+          <div className={row}>
             <span className="text-[11px]" style={{ color: 'var(--text-dim)' }}>
               mirror
             </span>
@@ -127,7 +138,17 @@ export default async function ProjectPage({ params }: Props) {
             </a>
           </div>
         )}
-        <div className="grid grid-cols-[48px_minmax(0,1fr)] items-baseline gap-3 sm:grid-cols-[64px_minmax(0,1fr)]">
+        {project.links?.map((link) => (
+          <div key={link.label} className={row}>
+            <span className="text-[11px]" style={{ color: 'var(--text-dim)' }}>
+              {link.label}
+            </span>
+            <a href={link.href} target="_blank" rel="noreferrer" className="break-all">
+              {link.href.replace(/^https?:\/\//, '')}
+            </a>
+          </div>
+        ))}
+        <div className={row}>
           <span className="text-[11px]" style={{ color: 'var(--text-dim)' }}>
             meta
           </span>
@@ -138,6 +159,8 @@ export default async function ProjectPage({ params }: Props) {
           </span>
         </div>
       </div>
+
+      {project.mods && <ModList mods={project.mods} countedAt={project.modsCountedAt} />}
 
       <ActivityGraph slug={project.slug} />
 

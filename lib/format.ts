@@ -4,6 +4,7 @@ export const statusColor: Record<ProjectStatus, string> = {
   ACTIVE: 'var(--accent)',
   STABLE: 'var(--cyan)',
   EXPERIMENTAL: 'var(--amber)',
+  BACKLOG: 'var(--text-dim)',
   ARCHIVED: 'var(--red)',
 };
 

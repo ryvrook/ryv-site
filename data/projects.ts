@@ -1,4 +1,20 @@
-export type ProjectStatus = 'ACTIVE' | 'STABLE' | 'EXPERIMENTAL' | 'ARCHIVED';
+import { site } from './site';
+
+export type ProjectStatus = 'ACTIVE' | 'STABLE' | 'EXPERIMENTAL' | 'BACKLOG' | 'ARCHIVED';
+
+export type Mod = {
+  name: string;
+  icon: string;
+  version: string;
+  group: 'Gameplay' | 'Server tools' | 'Libraries';
+  summary: string;
+  wiki: string;
+  curseforge?: string;
+  downloads?: number;
+  repo?: string;
+  // Shown instead of a download count, e.g. not published yet.
+  note?: string;
+};
 
 export type Project = {
   slug: string;
@@ -7,15 +23,21 @@ export type Project = {
   lang: string;
   updated: string;
   complexity: 1 | 2 | 3 | 4 | 5;
+  // Short labels shown beside the status, e.g. AI Assist.
+  tags?: string[];
   license?: string;
   pinned?: boolean;
   // Lower numbers appear first among pinned projects.
   pinnedOrder?: number;
   // deployment link
   url?: string;
+  // Label for the url row, defaults to url.
+  urlLabel?: string;
   // Absent = private repo although I have been ignoring this tbh
   repo?: string;
   mirror?: { href: string; label: string };
+  // Extra rows for the links panel, after url and source.
+  links?: { label: string; href: string }[];
   // Square brand mark or representative project image.
   image?: string;
   // Wide hero capture of the live site, shown at the top of the project page.
@@ -23,10 +45,213 @@ export type Project = {
   summary: string;
   body: string[];
   diagram?: string;
+  // A suite of related releases listed on the project page.
+  mods?: Mod[];
+  // Date the mod download counts were read.
+  modsCountedAt?: string;
   changelog: { date: string; message: string }[];
 };
 
 export const projects: Project[] = [
+  {
+    slug: 'hytale-mods',
+    name: 'Hytale Mods',
+    status: 'ACTIVE',
+    tags: ['AI Assist'],
+    lang: 'Java',
+    updated: '2026-10-19',
+    complexity: 5,
+    pinned: true,
+    pinnedOrder: 3,
+    url: 'https://mods.ryvrook.com',
+    urlLabel: 'wiki',
+    links: [
+      { label: 'curseforge', href: 'https://www.curseforge.com/members/ryvrook/projects' },
+    ],
+    image: '/projects/hytale-logo.png',
+    banner: '/projects/hytale-mods-banner.webp',
+    summary:
+      'Twelve server mods for Hytale and the wiki that documents them. Eleven are on CurseForge with 445 downloads, covering achievements, statistics, a live web map, an economy, factions, Discord, and an admin API.',
+    body: [
+      'I started writing Hytale server plugins on 2026-10-13 and it grew into a suite of twelve mods. Each one is a server-side Java plugin built with Gradle, with no client mod to install, and runs on Hytale server 0.7.2. Eleven are published on CurseForge, where they had 445 downloads as of 2026-10-19.',
+      'TrackerAPI sits underneath most of the suite. It hooks the engine once and publishes 62 typed event kinds, per-player counters, and an hourly journal, so Feats, Chronicle Stats, Atlas, and four other mods read the same stream instead of each patching the server. The mods also detect each other while running and only add shared features while a sibling is loaded, such as Coinage balances behind Dominion faction banks, Dominion faction threads in SocialBridge, and RestAPI route groups for eight other mods.',
+      'The largest mods are Dominion Factions, with 209 commands and 259 settings, and Coinage, with 157 commands over one ledger for payments, banks, shops, an auction house, and trading. Atlas serves a live web map straight from the server, with terrain, markers, a timeline of every world, and 3D views. Across the suite there are 576 commands and 1,055 settings, and every one of them is documented.',
+      'The documentation lives at mods.ryvrook.com, an Astro Starlight site written from each repository\'s source rather than its README. Every mod has pages for commands, permissions, settings, APIs, integrations, and its changelog. A separate server section explains the mods to players on my own server, including guides for five mods by other authors.',
+      'Polyglot, a chat translator, is documented and waiting on its first client test before it goes to CurseForge. Schematic Blueprints is in development. It saves builds or loads any prefab as a hologram, then lets a player in Adventure mode build it from their own inventory with a printer, easy place, a verifier, and a material list.',
+    ],
+    diagram: `                    hytale server 0.7.2
+                            |
+                            | engine hooks, registered once
+                            v
++------------------------------------------------------------------+
+| TRACKERAPI     62 typed event kinds · per-player counters ·      |
+|                hourly journal · read by seven sibling mods       |
++------------------------------------------------------------------+
+        |              |              |              |
+        v              v              v              v
+ +------------+ +------------+ +------------+ +--------------+
+ | feats      | | chronicle  | | atlas      | | dominion     |
+ | 455        | | stats      | | live web   | | factions     |
+ | achieve-   | | pages and  | | map, 3D,   | | claims,      |
+ | ments      | | dashboard  | | timeline   | | sieges, bank |
+ +------------+ +------------+ +------------+ +--------------+
+        |              |              |              |
+        +--------------+------+-------+--------------+
+                              | sibling detection: bind on load,
+                              | unbind on unload, one setting each
+                              v
+ +--------------+ +----------------+ +------------------------+
+ | coinage      | | socialbridge   | | restapi                |
+ | one ledger,  | | discord relay, | | http api, rcon, admin  |
+ | shops, bank  | | linking, roster| | dashboard, 144 routes  |
+ +--------------+ +----------------+ +------------------------+
+
+ standalone: lullaby · keepworkbenchtier · workbench chest link ·
+             polyglot
+
+ docs: mods.ryvrook.com, astro starlight, one section per mod`,
+    modsCountedAt: '2026-10-19',
+    mods: [
+      {
+        name: 'Feats',
+        icon: '/projects/hytale/feats.png',
+        version: '1.8.0',
+        group: 'Gameplay',
+        summary: '455 achievements in eleven tabs, up to 528 with packs and sibling mods, with unlock toasts, a banner, a browser, and a points leaderboard.',
+        wiki: 'https://mods.ryvrook.com/feats/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/feats',
+        downloads: 62,
+        repo: 'https://github.com/ryvrook/feats',
+      },
+      {
+        name: 'Chronicle Stats',
+        icon: '/projects/hytale/chronicle-stats.png',
+        version: '1.5.0',
+        group: 'Gameplay',
+        summary: 'Per-player, per-world, and per-day statistics, with in-game pages and a self-served web dashboard.',
+        wiki: 'https://mods.ryvrook.com/chronicle-stats/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/chronicle-stats',
+        downloads: 32,
+      },
+      {
+        name: 'Atlas',
+        icon: '/projects/hytale/atlas.png',
+        version: '1.9.1',
+        group: 'Gameplay',
+        summary: 'Live web map served from the server with terrain, players, markers, a timeline of every world, 3D views, and a Java API with marker events.',
+        wiki: 'https://mods.ryvrook.com/atlas/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/atlas',
+        downloads: 30,
+        repo: 'https://github.com/ryvrook/atlas',
+      },
+      {
+        name: 'Coinage',
+        icon: '/projects/hytale/coinage.png',
+        version: '1.3.1',
+        group: 'Gameplay',
+        summary: 'Economy plugin with one ledger behind payments, banknotes, banks, shops, an auction house, trading, a casino, and rewards.',
+        wiki: 'https://mods.ryvrook.com/coinage/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/coinage',
+        downloads: 21,
+      },
+      {
+        name: 'Dominion Factions',
+        icon: '/projects/hytale/dominion.png',
+        version: '0.7.2',
+        group: 'Gameplay',
+        summary: 'Factions with power-based claims, ranks, allies and nations, sieges, a bank and market, events, clan tags, and an API for other mods.',
+        wiki: 'https://mods.ryvrook.com/dominion/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/dominion-factions',
+        downloads: 25,
+        repo: 'https://github.com/ryvrook/dominion-factions',
+      },
+      {
+        name: 'Lullaby',
+        icon: '/projects/hytale/lullaby.png',
+        version: '1.1.0',
+        group: 'Gameplay',
+        summary: 'Ends the night when a share or fixed number of players sleep, leaving AFK, Creative, and spectating players out of the count.',
+        wiki: 'https://mods.ryvrook.com/lullaby/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/lullaby',
+        downloads: 75,
+        repo: 'https://github.com/ryvrook/lullaby',
+      },
+      {
+        name: 'Keep Workbench Tier',
+        icon: '/projects/hytale/keepworkbenchtier.png',
+        version: '1.0.2',
+        group: 'Gameplay',
+        summary: 'An upgraded crafting bench drops as an item of its tier when broken, and placing that item gives the bench back at that tier.',
+        wiki: 'https://mods.ryvrook.com/keepworkbenchtier/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/kwt',
+        downloads: 153,
+      },
+      {
+        name: 'Workbench Chest Link',
+        icon: '/projects/hytale/workbenchchestlink.png',
+        version: '1.0.0',
+        group: 'Gameplay',
+        summary: 'Links a crafting bench to the owner\'s registered chests and named stashes anywhere in the world, past the vanilla 14-block search.',
+        wiki: 'https://mods.ryvrook.com/workbenchchestlink/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/workbench-chest-link',
+        downloads: 7,
+      },
+      {
+        name: 'SocialBridge',
+        icon: '/projects/hytale/socialbridge.png',
+        version: '0.2.1',
+        group: 'Server tools',
+        summary: 'Discord chat relay, account linking, roster, and faction threads, with its own bot login or a bridge to a bot you already run.',
+        wiki: 'https://mods.ryvrook.com/socialbridge/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/socialbridge',
+        downloads: 2,
+      },
+      {
+        name: 'RestAPI',
+        icon: '/projects/hytale/restapi.png',
+        version: '0.3.0',
+        group: 'Server tools',
+        summary: 'HTTP API, RCON, and an admin dashboard with scoped keys, an audit log, OpenAPI docs, and route groups for eight sibling mods.',
+        wiki: 'https://mods.ryvrook.com/restapi/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/restapi',
+        downloads: 13,
+        repo: 'https://github.com/ryvrook/Hytale-RestAPI',
+      },
+      {
+        name: 'Polyglot',
+        icon: '/projects/hytale/polyglot.png',
+        version: '0.1.0',
+        group: 'Server tools',
+        summary: 'Translates public chat into each player\'s client language through a free Google endpoint or one of five other providers.',
+        wiki: 'https://mods.ryvrook.com/polyglot/',
+        note: 'not on CurseForge yet',
+      },
+      {
+        name: 'TrackerAPI',
+        icon: '/projects/hytale/trackerapi.png',
+        version: '1.1.1',
+        group: 'Libraries',
+        summary: 'Shared library that publishes 62 typed event kinds, per-player counters, and an hourly journal to other plugins.',
+        wiki: 'https://mods.ryvrook.com/trackerapi/',
+        curseforge: 'https://www.curseforge.com/hytale/mods/trackerapi',
+        downloads: 25,
+        repo: 'https://github.com/ryvrook/trackerapi',
+      },
+    ],
+    changelog: [
+      { date: '2026-10-19', message: 'published Workbench Chest Link 1.0.0 and started Schematic Blueprints' },
+      { date: '2026-10-18', message: 'served the RestAPI admin dashboard from the mod in 0.3.0' },
+      { date: '2026-10-18', message: 'moved every Feats string into Hytale\'s lang files in 1.8.0 and documented Polyglot 0.1.0' },
+      { date: '2026-10-18', message: 'kept the top farming and alchemy bench tiers in Keep Workbench Tier 1.0.2' },
+      { date: '2026-10-17', message: 'uploaded the rest of the suite to CurseForge' },
+      { date: '2026-10-16', message: 'launched the wiki at mods.ryvrook.com with a player guide section for my server' },
+      { date: '2026-10-16', message: 'released SocialBridge, RestAPI, and Keep Workbench Tier' },
+      { date: '2026-10-16', message: 'linked Dominion, Feats, Atlas, and Coinage through sibling detection' },
+      { date: '2026-10-15', message: 'published TrackerAPI, Coinage, and Chronicle Stats' },
+      { date: '2026-10-14', message: 'published Feats and Lullaby, the first two mods on CurseForge' },
+      { date: '2026-10-13', message: 'started Feats, Atlas, Dominion Factions, Lullaby, and Chronicle Stats' },
+    ],
+  },
   {
     slug: 'eternal-love',
     name: 'Eternal Love',
@@ -44,6 +269,7 @@ export const projects: Project[] = [
       'The Docker stack runs on Dokploy behind Cloudflare, with scheduled jobs, readiness checks, and backups to R2. The storefront and operating workflows are built; the repository still tracks launch work around production accounts, payments, and final content.',
     ],
     changelog: [
+      { date: '2026-10-07', message: 'added Google Tag Manager from the CMS, GA4 ecommerce events, and Search Console verification' },
       { date: '2026-10-07', message: 'hardened public endpoints, checkout limits, authentication cookies, and media uploads' },
       { date: '2026-10-06', message: 'connected CMS navigation and product images and configured the shared deployment network' },
       { date: '2026-10-05', message: 'built the storefront, checkout, fulfillment dashboard, custom quotes, and customer reviews' },
@@ -54,9 +280,10 @@ export const projects: Project[] = [
     name: 'DuckRelay',
     status: 'ACTIVE',
     lang: 'Go / TypeScript',
-    updated: '2026-09-29',
+    updated: '2026-10-11',
     complexity: 4,
-    pinned: false,
+    pinned: true,
+    pinnedOrder: 4,
     image: '/projects/duckrelay-logo.svg',
     summary: 'Rubber-duck passports that keep their story across owners, with tag claims, shared journeys, vehicle miles, and a companion mobile app.',
     body: [
@@ -64,8 +291,14 @@ export const projects: Project[] = [
       'Rigs represent the vehicles carrying the ducks, and a ride credits miles to every duck aboard. The Expo app includes a native trip recorder, manual rides, widgets, and Live Activity support. A social feed connects posts, comments, likes, follows, badges, and the growing flock.',
       'A Go modular monolith provides the API, outbox worker, and operator CLI over PostgreSQL. Next.js serves the public passports, claims, account pages, and admin tools. Photo storage uses an S3-compatible bucket, with private duck photos restricted to owners and followers.',
       'The tag-pack shop uses Stripe webhooks to turn paid checkouts into orders, with pack assignment and shipping handled by the admin. Account tools include passkeys, recovery codes, Google and Apple sign-in, exports, user blocking, and moderation controls. The repository records deployment rehearsals and App Store preparation; the app\'s eligibility is 16 and over.',
+      'In October I added an admin command center with an audit log, a reports inbox, bans and timed suspensions, and Stripe refunds. Any duck can now start with a free printable paper tag, and the store lists sticker tag packs as coming soon. An admin encode station writes official packs onto blank chip stickers and prints round QR labels and pack cards for each batch. Public posts appear as postcards inside a duck\'s passport chapters, and the public pages gained drawn share images, structured data, numbered sitemaps, an RSS feed, and analytics behind a consent banner.',
     ],
     changelog: [
+      { date: '2026-10-11', message: 'built numbered sitemap files and dated the Terms on web and mobile' },
+      { date: '2026-10-10', message: 'added free printable paper tags and an encode station for sticker tag packs' },
+      { date: '2026-10-09', message: 'added share images, structured data, an RSS feed, and consented analytics' },
+      { date: '2026-10-08', message: 'added the admin command center with reports, bans, suspensions, and refunds' },
+      { date: '2026-10-08', message: 'showed public posts as postcards in each duck\'s passport chapters' },
       { date: '2026-09-29', message: 'added tag-free duck registration, public slug pages, and passkey sign-in' },
       { date: '2026-09-29', message: 'prepared iOS review with privacy, blocking, sign-in, and 16-and-over eligibility' },
       { date: '2026-09-26', message: 'rehearsed deployment and added restore and moderation runbooks' },
@@ -75,11 +308,11 @@ export const projects: Project[] = [
   {
     slug: 'back2paper',
     name: 'Back2Paper',
-    status: 'ACTIVE',
+    status: 'STABLE',
     lang: 'Go / TypeScript',
     updated: '2026-09-15',
     url: 'https://back2paper.ryvrook.com',
-    complexity: 5,
+    complexity: 3,
     pinned: false,
     image: '/projects/back2paper-logo.svg',
     summary:
@@ -132,12 +365,12 @@ export const projects: Project[] = [
   {
     slug: 'directflock',
     name: 'Direct Flock',
-    status: 'ACTIVE',
+    status: 'BACKLOG',
     lang: 'TypeScript',
     updated: '2026-08-31',
     complexity: 4,
     pinned: true,
-    pinnedOrder: 2,
+    pinnedOrder: 6,
     repo: 'https://github.com/ryvrook/directflock',
     image: '/projects/directflock-logo.svg',
     summary:
@@ -225,7 +458,7 @@ export const projects: Project[] = [
     updated: '2026-09-01',
     complexity: 4,
     pinned: true,
-    pinnedOrder: 3,
+    pinnedOrder: 7,
     url: 'https://flockdirectories.com',
     banner: '/projects/flock-directories-banner.webp',
     repo: 'https://github.com/ryvrook/flockdirectories',
@@ -327,7 +560,7 @@ export const projects: Project[] = [
   {
     slug: 'boobies-media',
     name: 'Boobies Media',
-    status: 'ACTIVE',
+    status: 'STABLE',
     lang: 'Go',
     updated: '2026-08-20',
     complexity: 4,
@@ -442,7 +675,7 @@ export const projects: Project[] = [
     updated: '2026-07-26',
     complexity: 3,
     pinned: true,
-    pinnedOrder: 4,
+    pinnedOrder: 8,
     repo: 'https://github.com/ryvrook/dotfiles',
     summary:
       'Flake-based NixOS system configuration plus GNU Stow-managed application dotfiles, with physical-host and disposable QEMU VM targets.',
@@ -504,7 +737,7 @@ export const projects: Project[] = [
     updated: '2026-09-30',
     complexity: 4,
     pinned: true,
-    pinnedOrder: 5,
+    pinnedOrder: 1,
     url: 'https://vectordns.dev',
     banner: '/projects/enterprise-vectordns-banner.webp',
     image: '/projects/vectordns-logo.png',
@@ -584,21 +817,25 @@ export const projects: Project[] = [
   {
     slug: 'roadrunner',
     name: 'roadrunner',
-    status: 'ACTIVE',
+    status: 'STABLE',
     lang: 'JavaScript',
     updated: '2026-09-14',
     complexity: 3,
     pinned: true,
-    pinnedOrder: 7,
+    pinnedOrder: 2,
     url: 'https://roadrunnerlog.com',
+    links: [
+      { label: 'app store', href: 'https://apps.apple.com/app/id6808694361' },
+      { label: 'android', href: 'https://roadrunnerlog.com/downloads/roadrunnerlog.apk' },
+    ],
     banner: '/projects/roadrunner-banner.webp',
     image: '/projects/roadrunner-logo.png',
     summary:
-      'Maintenance logbook for every vehicle you own, on web and mobile. Service records, parts, costs, odometer history, file uploads.',
+      'Maintenance logbook for every vehicle you own, on the web, the App Store, and Android. Service records, parts, costs, odometer history, file uploads.',
     body: [
       'Tracks maintenance for bicycles, motorcycles, cars, and trucks. Service records, parts used, costs, odometer readings, and file uploads (OBD-II dumps, receipts, photos, manuals). It replaces the "replaced oil at 82,450 mi" note in your phone with structured, searchable history.',
       'Three containers: Postgres 16, an Express API with JWT auth that runs its own migrations on boot, and nginx serving the React SPA. An Expo mobile app talks to the same API. The stack refuses to start without a real JWT secret. There is no insecure default.',
-      'Reminders show overdue dates or mileage and export to your calendar. The mobile app now covers the web feature set, including personal parts lists and community guides, with controls for hiding guides and blocking authors. Recent work added store screenshots from a seeded demo garage, tablet layout fixes, and download links for the App Store and Android APK.',
+      'Reminders show overdue dates or mileage and export to your calendar. The mobile app now covers the web feature set, including personal parts lists and community guides, with controls for hiding guides and blocking authors. Recent work added store screenshots from a seeded demo garage and tablet layout fixes. The iOS app is live on the App Store, and Android users can install the APK from the site.',
     ],
     changelog: [
       { date: '2026-09-14', message: 'added App Store and direct Android download links to the landing page' },
@@ -618,7 +855,7 @@ export const projects: Project[] = [
     updated: '2026-08-17',
     complexity: 3,
     pinned: true,
-    pinnedOrder: 9,
+    pinnedOrder: 11,
     summary:
       'Website scanner for SEO readiness and AI-search readiness. Crawls a site, runs a catalog of checks, produces a diffable JSON report.',
     body: [
@@ -675,7 +912,7 @@ export const projects: Project[] = [
     updated: '2026-07-04',
     complexity: 3,
     pinned: true,
-    pinnedOrder: 10,
+    pinnedOrder: 12,
     url: 'https://qwuickswap.com',
     banner: '/projects/qwuickswap-banner.webp',
     image: '/projects/qwuickswap-logo.png',
@@ -719,9 +956,11 @@ export const projects: Project[] = [
     updated: '2026-09-06',
     complexity: 1,
     pinned: true,
-    pinnedOrder: 1,
+    pinnedOrder: 5,
     repo: 'https://github.com/ryvrook/ryv-site',
     url: 'https://ryvrook.com',
+    // Same picture as the home page.
+    image: site.avatar ?? undefined,
     summary:
       'This site. Next.js, one column, two data files and a folder of markdown. You\'re looking at it.',
     body: [
@@ -767,7 +1006,7 @@ export const projects: Project[] = [
   {
     slug: 'wrensmith',
     name: 'wrensmith',
-    status: 'ACTIVE',
+    status: 'BACKLOG',
     lang: 'TypeScript',
     updated: '2026-08-31',
     complexity: 4,
@@ -822,7 +1061,7 @@ export const projects: Project[] = [
     updated: '2026-08-17',
     complexity: 4,
     pinned: true,
-    pinnedOrder: 8,
+    pinnedOrder: 10,
     url: 'https://swallowtail.app',
     banner: '/projects/swallowtail-banner.webp',
     image: '/projects/swallowtail-logo.svg',
@@ -897,6 +1136,7 @@ export const projects: Project[] = [
     updated: '2026-08-31',
     complexity: 4,
     pinned: false,
+    image: '/projects/corviddata-logo.svg',
     summary:
       'Shared API gateway and operator console for the Corvid product network. API keys, consumers, usage metering, jobs, leads, and deployments.',
     body: [
@@ -957,6 +1197,7 @@ export const projects: Project[] = [
     updated: '2026-08-05',
     complexity: 1,
     pinned: false,
+    image: '/projects/corviddata-logo.svg',
     url: 'https://corviddata.com',
     banner: '/projects/corviddata-banner.webp',
     summary: 'Landing page for Corvid Data LLC.',
@@ -976,7 +1217,7 @@ export const projects: Project[] = [
     updated: '2026-06-14',
     complexity: 3,
     pinned: true,
-    pinnedOrder: 6,
+    pinnedOrder: 9,
     url: 'https://therandomizr.com',
     banner: '/projects/randomizr-banner.webp',
     repo: 'https://github.com/ryvrook/Randomizr',

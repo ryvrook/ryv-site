@@ -521,3 +521,9 @@ main p a, .post-body a, main .quiet-link, .recent-entry a {
   text-decoration: underline;
   text-underline-offset: 3px;
 }
+
+.project-tag {
+  color: var(--cyan);
+  opacity: .75;
+  white-space: nowrap;
+}

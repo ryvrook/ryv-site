@@ -3,8 +3,25 @@
 // data/projects.ts. Prints only, never writes. Run: bun run updates
 import { execFileSync } from 'node:child_process';
 
-// Slug -> repo. Keep in sync with data/projects.ts.
+// Slug -> repo, or a list of repos merged into one log. Keep in sync with
+// data/projects.ts.
 const repos = {
+  'hytale-mods': [
+    'ryvrook/trackerapi',
+    'ryvrook/feats',
+    'ryvrook/chronicle-stats',
+    'ryvrook/atlas',
+    'ryvrook/coinage',
+    'ryvrook/dominion-factions',
+    'ryvrook/lullaby',
+    'ryvrook/Hytale-SocialBridge',
+    'ryvrook/Hytale-RestAPI',
+    'ryvrook/restapi-dashboard',
+    'ryvrook/keepworkbenchtier',
+    'ryvrook/hytale-polyglot',
+    'ryvrook/workbenchchestlink',
+    'ryvrook/ryvrook-wiki',
+  ],
   'eternal-love': 'ryvrook/eternallove',
   'duckrelay': 'ryvrook/DuckRelay',
   'back2paper': 'ryvrook/Back2Paper',
@@ -57,17 +74,19 @@ function ghJson(path) {
 
 const results = [];
 for (const [slug, repo] of Object.entries(repos)) {
-  const commits = ghJson(`repos/${repo}/commits?per_page=${COMMITS_PER_REPO}`);
-  if (!commits) {
-    console.error(`skip ${slug}: no data for ${repo}`);
-    continue;
-  }
+  const commits = [repo].flat().flatMap((r) => {
+    const list = ghJson(`repos/${r}/commits?per_page=${COMMITS_PER_REPO}`);
+    if (!list) console.error(`skip ${r}: no data`);
+    return list ?? [];
+  });
   const entries = commits
     .filter((c) => c.parents?.length < 2) // drop merge commits
     .map((c) => ({
       date: c.commit.author.date.slice(0, 10),
       message: c.commit.message.split('\n')[0],
-    }));
+    }))
+    .sort((a, b) => b.date.localeCompare(a.date))
+    .slice(0, COMMITS_PER_REPO);
   if (entries.length) results.push({ slug, entries });
 }
 

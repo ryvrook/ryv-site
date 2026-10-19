@@ -10,7 +10,11 @@ export function ActivityGraph({ slug }: { slug: string }) {
   const total = weeks.reduce((a, b) => a + b, 0);
   const max = Math.max(...weeks);
   const label =
-    weeks.length === 52 ? 'past year' : `past ${weeks.length} weeks`;
+    weeks.length === 52
+      ? 'past year'
+      : weeks.length === 1
+        ? 'past week'
+        : `past ${weeks.length} weeks`;
 
   return (
     <div>

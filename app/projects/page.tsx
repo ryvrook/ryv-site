@@ -55,6 +55,11 @@ export default function ProjectsPage() {
                   </span>
                 )}
                 <span style={{ color: statusColor[p.status] }}>{p.status}</span>
+                {p.tags?.map((tag) => (
+                  <span key={tag} className="project-tag">
+                    [{tag.toLowerCase().replace(/\s+/g, '-')}]
+                  </span>
+                ))}
                 <span style={{ color: 'var(--text-dim)' }}>{p.lang}</span>
                 <span style={{ color: 'var(--text-dim)' }}>{p.updated}</span>
                 <span className="sm:ml-auto" style={{ color: 'var(--text-dim)' }}>
@@ -66,7 +71,7 @@ export default function ProjectsPage() {
                 {p.summary}
               </p>
               <div className="mt-[6px] text-[11px]" style={{ color: 'var(--text-faint)' }}>
-                → read log{p.repo ? ' · source ↗' : ' · private'}
+                → read log{p.repo ? ' · source ↗' : p.mods ? ` · ${p.mods.length} mods` : ' · private'}
               </div>
             </Link>
           );
